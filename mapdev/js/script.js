@@ -87,7 +87,10 @@ if(Modernizr.webgl) {
 		
 		//convert topojson to geojson
 		// Would love not to specify exact object - can we avoid?
-		var areas = topojson.feature(geog, geog.objects.LA2014merc);
+		//var areas = topojson.feature(geog, geog.objects.LA2014merc);
+		for(key in geog.objects){
+			var areas = topojson.feature(geog, geog.objects[key])
+		}
 		
 		bounds = turf.extent(areas);
 		
