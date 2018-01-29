@@ -686,7 +686,7 @@ if(Modernizr.webgl) {
 					if($('#areaselect').val() != "") {
 					//if(typeof params != 'undefined') {
 
-							d3.select("#map").node().focus();
+							//d3.select("#map").node().focus();
 
 							disableMouseEvents();
 
