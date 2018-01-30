@@ -687,6 +687,8 @@ if(Modernizr.webgl) {
 					//if(typeof params != 'undefined') {
 
 							//d3.select("#map").node().focus();
+							
+							areacode = $('#areaselect').val()
 
 							disableMouseEvents();
 
@@ -696,6 +698,11 @@ if(Modernizr.webgl) {
 							setAxisVal($('#areaselect').val());
 
 							zoomToArea($('#areaselect').val());
+							
+							dataLayer.push({
+								'event': 'dropSelect',
+								'selected': areacode				
+							})
 
 
 					}
