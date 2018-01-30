@@ -20,6 +20,7 @@ if(Modernizr.webgl) {
 		dvc = config.ons;
 		oldAREACD = "";
 		selected = false;
+		firsthover = true;
 
 		//Get column names
 		variables = [];
@@ -369,6 +370,18 @@ if(Modernizr.webgl) {
 		function onMove(e) {
 			// console.log(e)
 				newAREACD = e.features[0].properties.AREACD;
+				
+				
+				
+				if(firsthover) {
+					dataLayer.push({
+						'event': 'hoverSelect',
+						'selected': areacode				
+					})
+					
+					firsthover = false;
+				}
+				
 
 				if(newAREACD != oldAREACD) {
 					oldAREACD = e.features[0].properties.AREACD;
