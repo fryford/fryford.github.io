@@ -172,7 +172,9 @@ if(Modernizr.webgl) {
 
 
 			//Flatten data values and work out breaks
-			var values =  data.map(function(d) { return +eval("d." + variables[a]); }).filter(function(d) {return !isNaN(d)}).sort(d3.ascending);
+			if(config.ons.breaks =="jenks" || config.ons.breaks =="equal") {
+				var values =  data.map(function(d) { return +eval("d." + variables[a]); }).filter(function(d) {return !isNaN(d)}).sort(d3.ascending);
+			};
 
 			if(config.ons.breaks =="jenks") {
 				breaks = [];
@@ -376,7 +378,7 @@ if(Modernizr.webgl) {
 				if(firsthover) {
 					dataLayer.push({
 						'event': 'hoverSelect',
-						'selected': areacode				
+						'selected': newAREACD				
 					})
 					
 					firsthover = false;
@@ -588,7 +590,7 @@ if(Modernizr.webgl) {
 			//Temporary	hardcode unit text
 			dvc.unittext = "change in life expectancy";
 
-			d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit);
+			d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit[a]);
 
 	} // Ends create key
 
@@ -689,7 +691,6 @@ if(Modernizr.webgl) {
 
 			myId=null;
 
-			//$('#areaselect').chosen({width: "98%", allow_single_deselect:true}).on('change',function(evt,params){
 			 $('#areaselect').select2({placeholder:"Select an area",allowClear:true,dropdownParent:$('#sel')})
 
 			 $('#areaselect').on('input',function(){console.log("click")})
@@ -705,12 +706,11 @@ if(Modernizr.webgl) {
 
 							disableMouseEvents();
 
-							map.setFilter("state-fills-hover", ["==", "AREACD", $('#areaselect').val()]);
+							map.setFilter("state-fills-hover", ["==", "AREACD", areacode]);
 
-							selectArea($('#areaselect').val());
-							setAxisVal($('#areaselect').val());
-
-							zoomToArea($('#areaselect').val());
+							selectArea(areacode);
+							setAxisVal(areacode);
+							zoomToArea(areacode);
 							
 							dataLayer.push({
 								'event': 'dropSelect',
