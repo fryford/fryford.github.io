@@ -8,7 +8,7 @@ if(Modernizr.webgl) {
 
 	//Load data and config file
 	d3.queue()
-		.defer(d3.csv, "data/chnglem.csv")
+		.defer(d3.csv, "data/data.csv")
 		.defer(d3.json, "data/config.json")
 		.defer(d3.json, "data/geog.json")
 		.await(ready);
@@ -173,7 +173,7 @@ if(Modernizr.webgl) {
 
 			//Flatten data values and work out breaks
 			if(config.ons.breaks =="jenks" || config.ons.breaks =="equal") {
-				var values =  data.map(function(d) { return +eval("d." + variables[a]); }).filter(function(d) {return !isNaN(d)}).sort(d3.ascending);
+				var values =  data.map(function(d) { return +d[variables[a]]; }).filter(function(d) {return !isNaN(d)}).sort(d3.ascending);
 			};
 
 			if(config.ons.breaks =="jenks") {
@@ -192,7 +192,7 @@ if(Modernizr.webgl) {
 			else if (config.ons.breaks == "equal") {
 				breaks = ss.equalIntervalBreaks(values, dvc.numberBreaks);
 			}
-			else {breaks = config.ons.breaks;};
+			else {breaks = config.ons.breaks[a];};
 
 
 			//round breaks to specified decimal places
