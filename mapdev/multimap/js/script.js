@@ -56,7 +56,7 @@ if(Modernizr.webgl) {
 		  minZoom: 3.5,//
 		  zoom: 4.5, // starting zoom
 		  maxZoom: 13, //
-		  attributionControl: false
+		  attributionControl: false //
 		});
 		//add fullscreen option
 		//map.addControl(new mapboxgl.FullscreenControl());
@@ -111,8 +111,9 @@ if(Modernizr.webgl) {
 
 		//and add properties to the geojson based on the csv file we've read in
 		areas.features.map(function(d,i) {
-
-		  d.properties.fill = color(rateById[d.properties.AREACD])
+		  if(!isNaN(rateById[d.properties.AREACD])) 
+		  	{d.properties.fill = color(rateById[d.properties.AREACD])} 
+		  else {d.properties.fill = '#ccc'};
 		});
 
 
@@ -168,7 +169,7 @@ if(Modernizr.webgl) {
 			rateById = {};
 			areaById = {};
 
-			data.forEach(function(d) { rateById[d.AREACD] = +eval("d." + variables[a]); areaById[d.AREACD] = d.AREANM});
+			data.forEach(function(d) { rateById[d.AREACD] = +d[variables[a]]; areaById[d.AREACD] = d.AREANM}); //change to brackets
 
 
 			//Flatten data values and work out breaks
@@ -307,7 +308,6 @@ if(Modernizr.webgl) {
 			if(detectIE()){
 				onMove = onMove.debounce(200);
 				onLeave = onLeave.debounce(200);
-				console.log("ie");
 			};
 
 			//Highlight stroke on mouseover (and show area information)
@@ -329,8 +329,10 @@ if(Modernizr.webgl) {
 
 			//update properties to the geojson based on the csv file we've read in
 			areas.features.map(function(d,i) {
-
-			  d.properties.fill = color(rateById[d.properties.AREACD])
+			   if(!isNaN(rateById[d.properties.AREACD])) 
+			    {d.properties.fill = color(rateById[d.properties.AREACD])}
+			   else {d.properties.fill = '#ccc'};
+			  
 			});
 
 			//Reattach geojson data to area layer
@@ -670,7 +672,7 @@ if(Modernizr.webgl) {
 			var areacodes =  datacsv.map(function(d) { return d.AREACD; });
 			var areanames =  datacsv.map(function(d) { return d.AREANM; });
 			var menuarea = d3.zip(areanames,areacodes).sort(function(a, b){ return d3.ascending(a[0], b[0]); });
-
+	
 			menuarea.shift();
 			menuarea.shift();
 

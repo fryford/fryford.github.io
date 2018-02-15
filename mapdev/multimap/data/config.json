@@ -1,12 +1,12 @@
 {"ons":{
 "maptitle": "Multi Map about life expectancy",
-"varcolour": "YlGnBu",
+"varcolour": "YlOrRd",
 "varlabels": ["Male LE @ Birth","Female LE @ Birth","Male LE @ 65","Female LE @ 65"],
 "varload": 2,
 "varunit": ["% change","%","per cent" ,"tra la la"],
 "displaydecimals": 1,
 "legenddecimals": 0,
-"breaks": [[-8,0,5,10,20,30],[-8,0,5,10,20,30],[-8,0,5,10,20,30],[-8,0,5,10,20,30]],
+"breaks": "equal",
 "dropticks": false,
 "numberBreaks": 5
 }}
