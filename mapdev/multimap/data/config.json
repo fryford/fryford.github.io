@@ -1,6 +1,6 @@
 {"ons":{
 "maptitle": "Multi Map about life expectancy",
-"varcolour": "YlOrRd",
+"varcolour": "YlGnBu",
 "varlabels": ["Male LE @ Birth","Female LE @ Birth","Male LE @ 65","Female LE @ 65"],
 "varload": 2,
 "varunit": ["% change","%","per cent" ,"tra la la"],
