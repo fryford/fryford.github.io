@@ -121,6 +121,8 @@ if(Modernizr.webgl) {
 		
 		if ($('html').hasClass('touch')) {map.dragging.disable()};
 
+		alert("hello");
+		
 		function buildNav() {
 
 		formgroup = d3.select('#nav')
