@@ -6,7 +6,7 @@
 "varunit": ["% change","%","per cent" ,"tra la la"],
 "displaydecimals": 1,
 "legenddecimals": 0,
-"breaks": "equal",
+"breaks": "jenks",
 "dropticks": false,
 "numberBreaks": 5
 }}

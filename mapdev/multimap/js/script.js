@@ -118,6 +118,8 @@ if(Modernizr.webgl) {
 
 
 		map.on('load', defineLayers);
+		
+		if ($('html').hasClass('touch')) {map.dragging.disable()};
 
 		function buildNav() {
 
@@ -373,6 +375,9 @@ if(Modernizr.webgl) {
 
 		function onMove(e) {
 			// console.log(e)
+			
+				map.getCanvasContainer().style.cursor = 'pointer';
+				
 				newAREACD = e.features[0].properties.AREACD;
 				
 				
@@ -399,6 +404,7 @@ if(Modernizr.webgl) {
 
 
 		function onLeave() {
+				map.getCanvasContainer().style.cursor = null;
 				map.setFilter("state-fills-hover", ["==", "AREACD", ""]);
 				oldAREACD = "";
 				$("#areaselect").val(null).trigger('change.select2');
