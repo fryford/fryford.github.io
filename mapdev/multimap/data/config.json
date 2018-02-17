@@ -1,12 +1,12 @@
 {"ons":{
 "maptitle": "Multi Map about life expectancy",
 "varcolour": "YlGnBu",
-"varlabels": ["Male LE @ Birth","Female LE @ Birth","Male LE @ 65","Female LE @ 65"],
+"varlabels": ["House prices","Average Salary","Public sector employment","% with degree"],
 "varload": 2,
-"varunit": ["% change","%","per cent" ,"tra la la"],
-"displaydecimals": 1,
+"varunit": ["£'s","£'s per week","per cent" ,"per cent"],
+"displaydecimals": 0,
 "legenddecimals": 0,
 "breaks": "jenks",
-"dropticks": false,
+"dropticks": true,
 "numberBreaks": 5
 }}

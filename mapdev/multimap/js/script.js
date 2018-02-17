@@ -118,10 +118,9 @@ if(Modernizr.webgl) {
 
 
 		map.on('load', defineLayers);
-		
-		if ($('html').hasClass('touch')) {map.dragging.disable()};
-
-		alert("hello");
+				
+		if ($('html').hasClass('touch')) {map.scrollZoom.disable();
+		map.scrollZoom.disable();};
 		
 		function buildNav() {
 
@@ -172,8 +171,8 @@ if(Modernizr.webgl) {
 
 			rateById = {};
 			areaById = {};
-
-			data.forEach(function(d) { rateById[d.AREACD] = +d[variables[a]]; areaById[d.AREACD] = d.AREANM}); //change to brackets
+	
+			data.forEach(function(d) {rateById[d.AREACD] = +d[variables[a]]; areaById[d.AREACD] = d.AREANM}); //change to brackets
 
 
 			//Flatten data values and work out breaks
