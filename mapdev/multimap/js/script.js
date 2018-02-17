@@ -234,6 +234,7 @@ if(Modernizr.webgl) {
 				  'id': 'area',
 				  'type': 'fill',
 				  'source': 'area',
+				  'touchAction':'none',
 				  'layout': {},
 				  'paint': {
 					  'fill-color': {
