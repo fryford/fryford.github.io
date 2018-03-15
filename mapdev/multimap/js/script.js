@@ -116,11 +116,12 @@ if(Modernizr.webgl) {
 		  else {d.properties.fill = '#ccc'};
 		});
 
-
 		map.on('load', defineLayers);
-				
-		if ($('html').hasClass('touch')) {map.scrollZoom.disable();
-		map.scrollZoom.disable();};
+		
+		if ($('html').hasClass('touch')) {
+			map.scrollZoom.disable();
+			map.dragPan.disable();
+		};
 		
 		function buildNav() {
 

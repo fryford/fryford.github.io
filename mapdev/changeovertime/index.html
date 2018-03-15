@@ -7,7 +7,7 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
   <link href='css/mapbox-gl.css' rel='stylesheet'/>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,bold" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
 <style>
@@ -52,15 +52,17 @@
 	@media (min-width: 600px) {
 		#map {
 			height: 500px; 
-			width: 100%;
-			max-width:800px; 
+		}
+		
+		#horiz {
+			display:none;	
 		}
 		
 		#selectnav {
 			display: none;
 		}
 		
-		#selectNav {
+/*		#selectNav {
 			position:absolute;
 			top:0px;
 			left:0px;
@@ -68,9 +70,9 @@
 			height:40px;
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
-		}
+		}*/
 		
-		#keydiv {
+/*		#keydiv {
 			position:absolute;
 			top:40px;
 			left:0px;
@@ -78,7 +80,7 @@
 			height:230px;
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
-		}
+		}*/
 		
 		#currVal {
 			font-size:14px;
@@ -105,7 +107,7 @@
 			overflow:visible; 
 		}
 		
-		#selectNav {
+	/*	#selectNav {
 			position:absolute;
 			top:-120px;
 			left:0px;
@@ -113,9 +115,17 @@
 			height:40px;
 			background-color:rgba(255,255,255,0.8);
 			z-index:3;
+		}*/
+		
+		#vert {
+			display:none;	
 		}
 		
-		#keydiv {
+		#chartgroup {
+			display:none;	
+		}
+		
+/*		#keydiv {
 			position:absolute;
 			top:-80px;
 			left:0px;
@@ -124,7 +134,7 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
 		}
-		
+		*/
 		#currVal {
 			font-size:14px;
 			
@@ -521,7 +531,7 @@
 .col-xs-offset-0 {
   margin-left: 0;
 }
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;
   }
@@ -680,6 +690,44 @@
   }
 }
 
+/* Button styles */
+
+	.btn--large {
+		font-size: 16px;
+	}
+	.btn--primary-alternative {
+		background-color: #206095;
+		color: #fff;
+	}
+	
+	.btn--neutral {
+		background-color: #F9F9F9;
+		border: 1px solid #A6A8AB;
+	}
+	
+	.btn {
+		font-family: "Open Sans",Helvetica,Arial,sans-serif;
+		font-weight: 400;
+		font-size: 14px;
+		display: inline-block;
+		width: auto;
+		cursor: pointer;
+		padding: 15px 16px 10px 16px;
+		border: 0 none;
+		text-align: center;
+		-webkit-appearance: none;
+		transition: background-color 0.25s ease-out;
+		text-decoration: none;
+		line-height: 24px;
+	}
+	
+	.btn--bold {
+		font-weight: 600;
+	}
+	button {
+		cursor: pointer;
+	}
+
 	
 </style>
 
@@ -692,9 +740,26 @@
 	</div>
 </div>
 <div class="row">
-    <div id='map' class="col-sm-12">
-        <div id='keydiv'></div>
+	<div class="col-sm-3">
         <div id='selectNav'></div>
+        <div id='keydiv'></div>
+        <button class="btn btn--neutral btn--bold btn--large">
+            <img src="images/rewind.svg" height="25" width="25">
+        </button>
+        <button class="btn btn--primary-alternative btn--bold btn--large">
+            <img src="images/rewind.svg" height="25" width="25">
+        </button>
+        <button class="btn btn--neutral btn--bold btn--large">
+            <img src="images/fast-forward.svg" height="25" width="25">
+        </button>
+    </div>
+    <div id='map' class="col-sm-9">
+        
+    </div>   
+</div>
+<div class="row">
+	<div class="col-sm-12">
+    	<div id="source"></div>
     </div>   
 </div>
 

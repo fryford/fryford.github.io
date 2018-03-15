@@ -25,6 +25,18 @@ if(Modernizr.webgl) {
 		selected = false;
 		chartDrawn = false;
 		
+		overallwidth = d3.select("body").node().getBoundingClientRect().width;
+		
+		console.log(overallwidth);
+		
+		if(overallwidth < 600) {
+			mobile = true;
+		} else {
+			mobile = false;
+		} ;
+		
+	
+		
 		//Get column names and number
 		variables = [];
 		for (var column in data[0]) {
@@ -382,6 +394,8 @@ if(Modernizr.webgl) {
 		
 		function onchange(i) {
 			
+			chartDrawn = false;
+			
 			//load new csv file
 			
 			filepth = "data/data" + i + ".csv"
@@ -395,7 +409,9 @@ if(Modernizr.webgl) {
 				
 				if(selected) {
 					setAxisVal($("#areaselect").val());
-					updateChart($("#areaselect").val());
+					if(mobile == false) {
+						updateChart($("#areaselect").val());
+					}
 				}
 				updateLayers();
 			  
@@ -416,7 +432,9 @@ if(Modernizr.webgl) {
 				
 				if(selected) {
 					setAxisVal($("#areaselect").val());
-					updateChart($("#areaselect").val());
+					if(mobile == false) {
+						updateChart($("#areaselect").val());
+					}
 				}
 			} else {
 				a = 0;
@@ -425,7 +443,9 @@ if(Modernizr.webgl) {
 				
 				if(selected) {
 					setAxisVal($("#areaselect").val());
-					updateChart($("#areaselect").val());
+					if(mobile == false) {
+						updateChart($("#areaselect").val());
+					}
 				}
 			}
 				
@@ -439,6 +459,8 @@ if(Modernizr.webgl) {
 		
 		
 		function onMove(e) {
+				map.getCanvasContainer().style.cursor = 'pointer';
+			
 				newAREACD = e.features[0].properties.AREACD;
 				
 				if(newAREACD != oldAREACD) {
@@ -447,12 +469,15 @@ if(Modernizr.webgl) {
 					
 					selectArea(e.features[0].properties.AREACD);
 					setAxisVal(e.features[0].properties.AREACD);
-					updateChart(e.features[0].properties.AREACD);
+					if(mobile == false) {
+						updateChart(e.features[0].properties.AREACD);
+					}
 				}
 		};
 		
 					
 		function onLeave() {
+				map.getCanvasContainer().style.cursor = null;
 				map.setFilter("state-fills-hover", ["==", "AREACD", ""]);
 				oldAREACD = "";
 				$("#areaselect").val(null).trigger('change.select2');
@@ -469,7 +494,9 @@ if(Modernizr.webgl) {
 					
 					selectArea(e.features[0].properties.AREACD);
 					setAxisVal(e.features[0].properties.AREACD);
-					updateChart(e.features[0].properties.AREACD);
+					if(mobile == false) {
+						updateChart(e.features[0].properties.AREACD);
+					}
 				}
 				
 		};	
@@ -513,30 +540,45 @@ if(Modernizr.webgl) {
 		
 		
 		function setAxisVal(code) {
-			
+			if(mobile == false) {
+				d3.select("#currLine")
+					.style("opacity", function(){if(!isNaN(rateById[code])) {return 1} else{return 0}})
+					.transition()
+					.duration(300)
+					.attr("y1", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}})
+					.attr("y2", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}});
+									
+				d3.select("#currVal")
+					.text(function(){if(!isNaN(rateById[code]))  {return displayformat(rateById[code])} else {return "Data unavailable"}})
+					.style("opacity",1)
+					.transition()
+					.duration(300)
+					.attr("y", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}});
+					
+				d3.select("#currPoint")
+					.text(function(){if(!isNaN(rateById[code]))  {return displayformat(rateById[code])} else {return "Data unavailable"}})
+					.style("opacity", function(){if(!isNaN(rateById[code]))  {return 1} else {return 0}})
+					.transition()
+					.duration(300)
+					.attr("cx", x(dvc.timepoints[a]))
+					.attr("cy", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return 0}});
+			} else {
+				
 			d3.select("#currLine")
 				.style("opacity", function(){if(!isNaN(rateById[code])) {return 1} else{return 0}})
 				.transition()
-				.duration(300)
-				.attr("y1", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}})
-				.attr("y2", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}});
-				
-			console.log(rateById[code]);
-				
+				.duration(400)
+				.attr("x1", function(){if(!isNaN(rateById[code])) {return xkey(rateById[code])} else{return xkey(midpoint)}})
+				.attr("x2", function(){if(!isNaN(rateById[code])) {return xkey(rateById[code])} else{return xkey(midpoint)}});
+
+
 			d3.select("#currVal")
 				.text(function(){if(!isNaN(rateById[code]))  {return displayformat(rateById[code])} else {return "Data unavailable"}})
 				.style("opacity",1)
 				.transition()
-				.duration(300)
-				.attr("y", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}});
-				
-			d3.select("#currPoint")
-				.text(function(){if(!isNaN(rateById[code]))  {return displayformat(rateById[code])} else {return "Data unavailable"}})
-				.style("opacity", function(){if(!isNaN(rateById[code]))  {return 1} else {return 0}})
-				.transition()
-				.duration(300)
-				.attr("cx", x(dvc.timepoints[a]))
-				.attr("cy", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return 0}});
+				.duration(400)
+				.attr("x", function(){if(!isNaN(rateById[code])) {return xkey(rateById[code])} else{return xkey(midpoint)}});
+			}
 				
 		}
 		
@@ -567,6 +609,7 @@ if(Modernizr.webgl) {
 					.attr("id","chartgroup")
 					.append("path") 
 					.attr("id","line1") 
+					.style("opacity",1)
 					.attr("d", line1(linedata)) 
 					.attr("stroke", "#666")
 					.attr("stroke-width", "2px")		
@@ -587,6 +630,7 @@ if(Modernizr.webgl) {
 				linedata = d3.zip(dvc.timepoints,values);
 				
 				d3.select("#line1")
+					.style("opacity",1)
 					.transition()
 					.duration(300)
 					.attr("d", line1(linedata))
@@ -596,133 +640,223 @@ if(Modernizr.webgl) {
 		}
 		
 		function hideaxisVal() {
+			d3.select("#line1")
+				.style("opacity",0);
+				
+			d3.select("#currPoint")
+				.style("opacity",0);
+			
 			d3.select("#currLine")
-				.style("opacity",0)
+				.style("opacity",0);
 				
 			d3.select("#currVal").text("")
-				.style("opacity",0)
+				.style("opacity",0);
 		}
 		
 		function createKey(config){
 			
 			d3.select("#keydiv").selectAll("*").remove();
 			
-			d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","5px").style("margin-left","10px").text(dvc.varunit[a]);
-			
-			keyheight = 150;
-			
-			keywidth = d3.select("#keydiv").node().getBoundingClientRect().width;
-			
-			svgkey = d3.select("#keydiv")
-				.append("svg")
-				.attr("id", "key")
-				.attr("width", keywidth)
-				.attr("height",keyheight + 30);
-		
-	
 			var color = d3.scaleThreshold()
 			   .domain(breaks)
 			   .range(colour);
-	
-			// Set up scales for legend
-			y = d3.scaleLinear()
-				.domain([breaks[0], breaks[dvc.numberBreaks]]) /*range for data*/
-				.range([keyheight, 0]); /*range for pixels*/
-				
-			// Set up scales for chart
-			x = d3.scalePoint()
-				.domain(dvc.timepoints) /*range for data*/
-				.range([0,keywidth-60])
-				.align(0.5); /*range for pixels*/
-	
-	
-			var yAxis = d3.axisLeft(y)
-				.tickSize(15)
-				.tickValues(color.domain())
-				.tickFormat(legendformat);
 			
-			var xAxisTime = d3.axisBottom(x)
-				.tickSize(5)
-				.tickValues([dvc.timepoints[0], dvc.timepoints[dvc.timepoints.length-1]])
-				.tickFormat(legendformat);
+			if(mobile == false) {
+				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","5px").style("margin-left","10px").text(dvc.varunit[a]);
+				
+				keyheight = 150;
+			
+				keywidth = d3.select("#keydiv").node().getBoundingClientRect().width;
+				
+				svgkey = d3.select("#keydiv")
+					.append("svg")
+					.attr("id", "key")
+					.attr("width", keywidth)
+					.attr("height",keyheight + 30);
+				
+				// Set up scales for legend
+				y = d3.scaleLinear()
+					.domain([breaks[0], breaks[dvc.numberBreaks]]) /*range for data*/
+					.range([keyheight, 0]); /*range for pixels*/
+					
+				// Set up scales for chart
+				x = d3.scalePoint()
+					.domain(dvc.timepoints) /*range for data*/
+					.range([0,keywidth-60])
+					.align(0.5); /*range for pixels*/
+		
+		
+				var yAxis = d3.axisLeft(y)
+					.tickSize(15)
+					.tickValues(color.domain())
+					.tickFormat(legendformat);
+				
+				var xAxisTime = d3.axisBottom(x)
+					.tickSize(5)
+					.tickValues([dvc.timepoints[0], dvc.timepoints[dvc.timepoints.length-1]])
+					.tickFormat(legendformat);
+		
+				var g = svgkey.append("g").attr("id","vert")
+					.attr("transform", "translate(45,10)");
+		
+		
+				g.selectAll("rect")
+				.data(color.range().map(function(d, i) {
+				  return {
+					y0: i ? y(color.domain()[i]) : y.range()[0],
+					y1: i < color.domain().length ? y(color.domain()[i+1]) : y.range()[1],
+					z: d
+				  };
+				}))
+				.enter().append("rect")
+				.attr("width", 8)
+				.attr("x", -8)
+				.attr("y", function(d) {return d.y1; })
+				.attr("height", function(d) {return d.y0 - d.y1; })
+				.style("fill", function(d) {return d.z; });
 	
-			var g = svgkey.append("g").attr("id","horiz")
-				.attr("transform", "translate(45,10)");
-	
-	
-			g.selectAll("rect")
-			.data(color.range().map(function(d, i) {
-			  return {
-				y0: i ? y(color.domain()[i]) : y.range()[0],
-				y1: i < color.domain().length ? y(color.domain()[i+1]) : y.range()[1],
-				z: d
-			  };
-			}))
-			.enter().append("rect")
-			.attr("width", 8)
-			.attr("x", -8)
-			.attr("y", function(d) {return d.y1; })
-			.attr("height", function(d) {return d.y0 - d.y1; })
-			.style("fill", function(d) {return d.z; });
+				g.call(yAxis).append("text");
+				
+				svgkey.append("g").attr("id","timeaxis").attr("transform", "translate(45," + (10 + keyheight) + ")")
+					.call(xAxisTime)//.append("text");
+					
+				d3.selectAll("path").attr("display","none")
+		
+				g.append("line")
+					.attr("id", "currLine")
+					.attr("y1", y(10))
+					.attr("y2", y(10))
+					.attr("x1", -10)
+					.attr("x2", 0)
+					.attr("stroke-width","2px")
+					.attr("stroke","#000")
+					.attr("opacity",0);
+					
+				g.append("text")
+					.attr("id", "currVal")
+					.attr("y", y(10))
+					.attr("x", -15)
+					.attr("fill","#000")
+					.attr("paint-order","stroke")
+					.attr("stroke","#fff")
+					.attr("stroke-width","5px")
+					.attr("stroke-linecap","butt")
+					.attr("stroke-linejoin","miter")
+					.text("");
+					
+					
+				g.append("circle")
+					.attr("id", "currPoint")
+					.attr("r","4px")
+					.attr("cy", y(10))
+					.attr("cx", x(dvc.timepoints[a]))
+					.attr("fill","#666")
+					.attr("opacity",0);
+					
+			} else {
+				// Horizontal legend
+				keyheight = 65;
+			
+				keywidth = d3.select("#keydiv").node().getBoundingClientRect().width;
+				
+				svgkey = d3.select("#keydiv")
+					.append("svg")
+					.attr("id", "key")
+					.attr("width", keywidth)
+					.attr("height",keyheight);
 
-			g.call(yAxis).append("text");
 			
-			svgkey.append("g").attr("transform", "translate(45," + (10 + keyheight) + ")")
-				.call(xAxisTime)//.append("text");
+				xkey = d3.scaleLinear()
+					.domain([breaks[0], breaks[dvc.numberBreaks]]) /*range for data*/
+					.range([0,keywidth-30]); /*range for pixels*/
 	
-			g.append("line")
-				.attr("id", "currLine")
-				.attr("y1", y(10))
-				.attr("y2", y(10))
-				.attr("x1", -10)
-				.attr("x2", 0)
-				.attr("stroke-width","2px")
-				.attr("stroke","#000")
-				.attr("opacity",0);
-				
-			g.append("text")
-				.attr("id", "currVal")
-				.attr("y", y(10))
-				.attr("x", -15)
-				.attr("fill","#000")
-				.attr("paint-order","stroke")
-				.attr("stroke","#fff")
-				.attr("stroke-width","5px")
-				.attr("stroke-linecap","butt")
-				.attr("stroke-linejoin","miter")
-				.text("");
-				
-				
-			g.append("circle")
-				.attr("id", "currPoint")
-				.attr("r","4px")
-				.attr("cy", y(10))
-				.attr("cx", x(dvc.timepoints[a]))
-				.attr("fill","#666")
-				.attr("opacity",0);
-				
-			
-			
-//			keyhor.call(xAxis).append("text")
-//				.attr("id", "caption")
-//				.attr("x", -63)
-//				.attr("y", -20)
-//				.text("");
-//	
-//			keyhor.append("rect")
-//				.attr("id","keybar")
-//				.attr("width",8)
-//				.attr("height",0)
-//				.attr("transform","translate(15,0)")
-//				.style("fill", "#ccc")
-//				.attr("x",x(0));
+				y = d3.scaleLinear()
+					.domain([breaks[0], breaks[dvc.numberBreaks]]) /*range for data*/
+					.range([0, keywidth-30]); /*range for pixels*/
+	
+				var xAxis = d3.axisBottom(xkey)
+					.tickSize(15)
+					.tickValues(color.domain())
+					.tickFormat(legendformat);
+	
+				var g2 = svgkey.append("g").attr("id","horiz")
+					.attr("transform", "translate(15,30)");
 	
 	
-			if(dvc.dropticks) {
-				d3.select("#horiz").selectAll("text").attr("transform",function(d,i){
-						// if there are more that 4 breaks, so > 5 ticks, then drop every other.
-						if(i % 2){return "translate(0,10)"} }
-				);
+				keyhor = d3.select("#horiz");
+	
+				g2.selectAll("rect")
+					.data(color.range().map(function(d,i) {
+	
+					  return {
+						x0: i ? xkey(color.domain()[i+1]) : xkey.range()[0],
+						x1: i < color.domain().length ? xkey(color.domain()[i+1]) : xkey.range()[1],
+						z: d
+					  };
+					}))
+				  .enter().append("rect")
+					.attr("class", "blocks")
+					.attr("height", 8)
+					.attr("x", function(d) {
+						 return d.x0; })
+					.attr("width", function(d) {return d.x1 - d.x0; })
+					.style("opacity",0.8)
+					.style("fill", function(d) { return d.z; });
+	
+	
+				g2.append("line")
+					.attr("id", "currLine")
+					.attr("x1", xkey(10))
+					.attr("x2", xkey(10))
+					.attr("y1", -10)
+					.attr("y2", 8)
+					.attr("stroke-width","2px")
+					.attr("stroke","#000")
+					.attr("opacity",0);
+	
+				g2.append("text")
+					.attr("id", "currVal")
+					.attr("x", xkey(10))
+					.attr("y", -15)
+					.attr("fill","#000")
+					.text("");
+	
+	
+	
+				keyhor.selectAll("rect")
+					.data(color.range().map(function(d, i) {
+					  return {
+						x0: i ? xkey(color.domain()[i]) : xkey.range()[0],
+						x1: i < color.domain().length ? xkey(color.domain()[i+1]) : xkey.range()[1],
+						z: d
+					  };
+					}))
+					.attr("x", function(d) { return d.x0; })
+					.attr("width", function(d) { return d.x1 - d.x0; })
+					.style("fill", function(d) { return d.z; });
+	
+				keyhor.call(xAxis).append("text")
+					.attr("id", "caption")
+					.attr("x", -63)
+					.attr("y", -20)
+					.text("");
+	
+				keyhor.append("rect")
+					.attr("id","keybar")
+					.attr("width",8)
+					.attr("height",0)
+					.attr("transform","translate(15,0)")
+					.style("fill", "#ccc")
+					.attr("x",xkey(0));
+		
+				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit[a]);
+				
+				if(dvc.dropticks) {
+					d3.select("#horiz").selectAll("text").attr("transform",function(d,i){
+							// if there are more that 4 breaks, so > 5 ticks, then drop every other.
+							if(i % 2){return "translate(0,10)"} }
+					);
+				}
 			}
 			
 			
@@ -796,7 +930,9 @@ if(Modernizr.webgl) {
 	
 	  selectArea(features[0].properties.AREACD);
 	  setAxisVal(features[0].properties.AREACD);
-	  updateChart(features[0].properties.AREACD);
+	  if(mobile == false) {
+			updateChart(e.features[0].properties.AREACD);
+	  }
 	  
 	  
 	};
@@ -839,7 +975,9 @@ if(Modernizr.webgl) {
 
 							selectArea(areacode);
 							setAxisVal(areacode);
-							updateChart(areacode);
+							if(mobile == false) {
+								updateChart(areacode);
+							}
 							zoomToArea(areacode);
 							
 					}
