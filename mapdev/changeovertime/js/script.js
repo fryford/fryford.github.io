@@ -112,6 +112,8 @@ if(Modernizr.webgl) {
 		
 		setupScales(data);
 		
+		setTimeLabel(a);
+		
 		//now ranges are set we can call draw the key
 		createKey(config);
 		
@@ -138,6 +140,12 @@ if(Modernizr.webgl) {
 
 		
 		map.on('load', defineLayers);
+		
+		setButtons();
+		setSource();
+
+		//setInterval(function(){animate()}, 3000);
+		
 		
 		function buildNav() {
 	
@@ -181,7 +189,7 @@ if(Modernizr.webgl) {
 							.property("selected", function(d, i) {return i===dvc.timeload;})
 							.text(function(d,i){return dvc.varlabels[i]});
 							
-			//setInterval(function(){animate()}, 3000);
+			
 		
 						
 		}
@@ -195,6 +203,19 @@ if(Modernizr.webgl) {
 			
 		}
 		
+		function setTimeLabel(){
+			d3.select("#timePeriod").text(dvc.timepoints[a]);
+		}
+		
+		function checkIfFirstorLast() {
+			if(a=0) {
+				
+			}
+	
+				
+		}
+	
+	
 		function defineBreaks(data){
 			//Flatten data values and work out breaks
 			var values =  data.map(function(d) { return +eval("d." + variables[a]); }).filter(function(d) {return !isNaN(d)}).sort(d3.ascending);
@@ -421,6 +442,28 @@ if(Modernizr.webgl) {
 			
 		}
 		
+		function setButtons() {
+			d3.select("#play").on("click", function() {
+				
+				animating = setInterval(function(){animate()}, 2000);
+				d3.selectAll(".btn--neutral").classed("btn--neutral-disabled",true)
+				
+				d3.select("#playImage").attr("src","images/pause.svg");
+				
+				d3.select("#play").attr("id","pause");
+				
+				d3.select("#pause").on("click", function(){
+						d3.select("#pause").attr("id","play")
+						d3.select("#playImage").attr("src","images/play.svg");
+						setButtons();
+						clearInterval(animating);
+						d3.selectAll(".btn--neutral").classed("btn--neutral-disabled",false)
+				});
+				
+				
+			})
+		}
+		
 		function animate() {
 			
 			console.log(a);
@@ -450,6 +493,7 @@ if(Modernizr.webgl) {
 			}
 				
 		}
+		
 		
 		function onselect() {
 			a = $(".dropdown").val();
@@ -662,6 +706,8 @@ if(Modernizr.webgl) {
 			   .range(colour);
 			
 			if(mobile == false) {
+				
+				console.log(a);
 				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","5px").style("margin-left","10px").text(dvc.varunit[a]);
 				
 				keyheight = 150;
@@ -849,6 +895,7 @@ if(Modernizr.webgl) {
 					.style("fill", "#ccc")
 					.attr("x",xkey(0));
 		
+		
 				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit[a]);
 				
 				if(dvc.dropticks) {
@@ -936,6 +983,10 @@ if(Modernizr.webgl) {
 	  
 	  
 	};
+	
+	function setSource() {
+		d3.select("#source").text("Source: " + dvc.sourcetext);
+	}
 		
 		function selectlist(datacsv) {
 
