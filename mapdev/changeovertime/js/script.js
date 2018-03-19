@@ -26,9 +26,7 @@ if(Modernizr.webgl) {
 		chartDrawn = false;
 		
 		overallwidth = d3.select("body").node().getBoundingClientRect().width;
-		
-		console.log(overallwidth);
-		
+
 		if(overallwidth < 600) {
 			mobile = true;
 		} else {
@@ -373,7 +371,6 @@ if(Modernizr.webgl) {
 			if(detectIE()){
 				onMove = onMove.debounce(200);
 				onLeave = onLeave.debounce(200);
-				console.log("ie");
 			};
 			
 			//Highlight stroke on mouseover (and show area information)
@@ -462,16 +459,20 @@ if(Modernizr.webgl) {
 				
 				
 			})
+			
+			d3.select("#forward").on("click", animate);
+			
+			d3.select("#back").on("click", rev_animate);
+	
 		}
 		
 		function animate() {
-			
-			console.log(a);
-			
+						
 			if(a < variables.length -1) {
 				a = a + 1;
 				setRates(data);
 				updateLayers();
+				updateTimeLabel();
 				
 				if(selected) {
 					setAxisVal($("#areaselect").val());
@@ -483,6 +484,7 @@ if(Modernizr.webgl) {
 				a = 0;
 				setRates(data);
 				updateLayers();
+				updateTimeLabel();
 				
 				if(selected) {
 					setAxisVal($("#areaselect").val());
@@ -494,6 +496,41 @@ if(Modernizr.webgl) {
 				
 		}
 		
+		function rev_animate() {
+			
+			if(a > 0 ) {
+				a = a - 1;
+				setRates(data);
+				updateLayers();
+				updateTimeLabel();
+				
+				if(selected) {
+					setAxisVal($("#areaselect").val());
+					if(mobile == false) {
+						updateChart($("#areaselect").val());
+					}
+				}
+			} else {
+				a = variables.length-1;
+				setRates(data);
+				updateLayers();
+				updateTimeLabel();
+				
+				if(selected) {
+					setAxisVal($("#areaselect").val());
+					if(mobile == false) {
+						updateChart($("#areaselect").val());
+					}
+				}
+			}
+				
+		}
+		
+		function updateTimeLabel(){
+			
+			d3.select("#timePeriod").text(dvc.timepoints[a])
+				
+		}
 		
 		function onselect() {
 			a = $(".dropdown").val();
@@ -597,7 +634,7 @@ if(Modernizr.webgl) {
 					.style("opacity",1)
 					.transition()
 					.duration(300)
-					.attr("y", function(){if(!isNaN(rateById[code])) {return y(rateById[code])} else{return y(midpoint)}});
+					.attr("y", function(){if(!isNaN(rateById[code])) {return y(rateById[code])+5} else{return y(midpoint)}});
 					
 				d3.select("#currPoint")
 					.text(function(){if(!isNaN(rateById[code]))  {return displayformat(rateById[code])} else {return "Data unavailable"}})
@@ -707,7 +744,6 @@ if(Modernizr.webgl) {
 			
 			if(mobile == false) {
 				
-				console.log(a);
 				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","5px").style("margin-left","10px").text(dvc.varunit[a]);
 				
 				keyheight = 150;
@@ -780,7 +816,7 @@ if(Modernizr.webgl) {
 					
 				g.append("text")
 					.attr("id", "currVal")
-					.attr("y", y(10))
+					.attr("y", y(10)+5)
 					.attr("x", -15)
 					.attr("fill","#000")
 					.attr("paint-order","stroke")
@@ -1011,8 +1047,6 @@ if(Modernizr.webgl) {
 			myId=null;
 
 		 $('#areaselect').select2({placeholder:"Select an area",allowClear:true,dropdownParent:$('#sel')})
-
-			 $('#areaselect').on('input',function(){console.log("click")})
 
 			$('#areaselect').on('change',function(){
 
