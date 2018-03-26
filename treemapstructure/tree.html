@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>This bloody tree structure...</title>
+</head>
+<script type="text/javascript" src="base.js"></script>
+<script type="text/javascript" src="DataStructures.Tree.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+d3.csv("tree.csv", function(data){
+			var tree = DataStructures.Tree.createFromFlatTable(data),
+            root = tree.toSimpleObject(function(objectToDecorate, originalNode) {
+                objectToDecorate.size = originalNode.size;
+                if (objectToDecorate.children && objectToDecorate.children.length == 0) {
+                    delete objectToDecorate.children;
+                }
+				
+			
+            return objectToDecorate;
+			
+			
+			
+			
+			});
+			console.log(JSON.stringify(root));
+			document.getElementById("SHOWME").value = JSON.stringify(root);
+});
+
+
+
+
+</script>
+
+<body>
+
+<textarea id="SHOWME"></textarea>
+
+</body>
+</html>
