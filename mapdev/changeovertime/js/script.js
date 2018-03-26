@@ -43,6 +43,8 @@ if(Modernizr.webgl) {
 			variables.push(column);
 		}	
 		
+		b=0;
+		
 		if(dvc.timeload == "last") {
 			a = variables.length -1;
 		} else {
@@ -165,8 +167,8 @@ if(Modernizr.webgl) {
 				.attr("type","radio")
 				.attr("name","button")
 				.attr("value",function(d,i){return i})
-				.attr("aria-checked", function(d,i){if(i == dvc.timeload){return true}})
-				.property("checked", function(d, i) {return i===dvc.timeload;})
+				.attr("aria-checked", function(d,i){if(i == b){return true}})
+				.property("checked", function(d, i) {return i===b;})
 				
 			formgroup.append('label')
 				.attr('class','label-primary-fullwidth')
@@ -184,7 +186,7 @@ if(Modernizr.webgl) {
 							.enter()
 							.append('option')
 							.attr("value", function(d,i){return i})
-							.property("selected", function(d, i) {return i===dvc.timeload;})
+							.property("selected", function(d, i) {return i===b;})
 							.text(function(d,i){return dvc.varlabels[i]});
 							
 			
@@ -439,6 +441,7 @@ if(Modernizr.webgl) {
 			
 		}
 		
+		
 		function setButtons() {
 			d3.select("#play").on("click", function() {
 				
@@ -533,8 +536,8 @@ if(Modernizr.webgl) {
 		}
 		
 		function onselect() {
-			a = $(".dropdown").val();
-			onchange(a);
+			b = $(".dropdown").val();
+			onchange(b);
 			
 		}
 		
@@ -744,7 +747,7 @@ if(Modernizr.webgl) {
 			
 			if(mobile == false) {
 				
-				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","5px").style("margin-left","10px").text(dvc.varunit[a]);
+				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","25px").style("margin-left","10px").text(dvc.varunit[b]);
 				
 				keyheight = 150;
 			
@@ -779,7 +782,10 @@ if(Modernizr.webgl) {
 					.tickFormat(legendformat);
 		
 				var g = svgkey.append("g").attr("id","vert")
-					.attr("transform", "translate(45,10)");
+					.attr("transform", "translate(45,10)")
+					.attr("font-weight","600")
+					.style("font-family","'open sans'")
+					.style("font-size","12px");
 		
 		
 				g.selectAll("rect")
@@ -799,8 +805,12 @@ if(Modernizr.webgl) {
 	
 				g.call(yAxis).append("text");
 				
-				svgkey.append("g").attr("id","timeaxis").attr("transform", "translate(45," + (10 + keyheight) + ")")
-					.call(xAxisTime)//.append("text");
+				svgkey.append("g").attr("id","timeaxis")
+					.attr("transform", "translate(45," + (10 + keyheight) + ")")
+					.attr("font-weight","600")
+					.style("font-family","'open sans'")
+					.style("font-size","12px")
+					.call(xAxisTime)
 					
 				d3.selectAll("path").attr("display","none")
 		
@@ -932,7 +942,7 @@ if(Modernizr.webgl) {
 					.attr("x",xkey(0));
 		
 		
-				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit[a]);
+				d3.select("#keydiv").append("p").attr("id","keyunit").style("margin-top","-10px").style("margin-left","10px").text(dvc.varunit[b]);
 				
 				if(dvc.dropticks) {
 					d3.select("#horiz").selectAll("text").attr("transform",function(d,i){
