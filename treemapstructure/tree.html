@@ -10,7 +10,7 @@
 
 <script>
 
-d3.csv("tree.csv", function(data){
+d3.csv("nesting2.csv", function(data){
 			var tree = DataStructures.Tree.createFromFlatTable(data),
             root = tree.toSimpleObject(function(objectToDecorate, originalNode) {
                 objectToDecorate.size = originalNode.size;
