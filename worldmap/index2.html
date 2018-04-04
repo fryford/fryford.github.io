@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Trade - worldmap</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<!--<script src="lib/d3.v3.min.js"></script>-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="bootstrap-grid.css">
+
+<style>
+	body {
+		max-width:800px;	
+	}
+
+	.countries {
+		stroke: #EAEAEA;
+    	stroke-width: 0.05%;
+    	fill: #5F7682;	
+		cursor:pointer;
+	}
+	
+	.countries_highlights {
+    	fill: #E2BC22;	
+	}
+	
+	.axis text {
+		fill: #333;
+		font-size: 11px;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	.domain {
+		stroke:none;
+	}
+	
+	#selectNav {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		width: 100%;
+		max-width: 800px;
+		z-index: 2;	
+	}
+	
+	
+
+/*Map zoom buttons */
+
+
+
+	.zoom-control-zoom a, .zoom-control-layers-toggle {
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		display: block;
+	}
+
+	.zoom-control-zoom a {
+		width: 22px;
+		height: 22px;
+		text-align: center;
+		text-decoration: none;
+		color: #5381ca;
+	}
+
+	.zoom-control-zoom-in {
+		cursor:pointer;
+		font: bold 18px/24px Arial, Helvetica, sans-serif;
+	}
+
+	.zoom-control-zoom-in:hover {
+			color: #fff;
+			background-color: #5381ca;
+	}
+
+	.zoom-bar-part {
+		background-color: rgba(255, 255, 255, 0.8);
+		border-bottom: 1px solid #aaa;
+	}
+
+	.zoom-control-zoom-out {
+		cursor:pointer;
+		font: bold 23px/20px Tahoma, Verdana, sans-serif;
+	}
+
+	.zoom-control-zoom-out:hover {
+		color: #fff;
+		background-color: #5381ca;
+	}
+
+	.zoom-bar-part-bottom {
+		border-bottom: none;
+	}
+
+	.zoom-container {
+		margin-left: 13px;
+		margin-top: 85px;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+	}
+
+	.zoom-bar {
+		border: 1px solid #59a4da;
+	}
+
+	.zoom-popup-pane, .zoom-control {
+		cursor: auto;
+	}
+
+	.zoom-control {
+		float: left;
+		clear: both;
+	}
+
+	.zoom-control {
+		z-index: 1;
+		pointer-events: auto;
+	}
+
+</style>
+
+</head>
+<body>
+<div class="row">
+	<div id="selectNav"></div>
+	<div class="zoom-container zoom-control-zoom zoom-bar zoom-control">
+    	<a class="zoom-control-zoom-in zoom-bar-part zoom-bar-part-top" title="Zoom in">+</a>
+        <a class="zoom-control-zoom-out zoom-bar-part zoom-bar-part-bottom" title="Zoom out">-</a>
+    </div>
+    <div id="mapDiv" class="col-sm-9 hidden-xs">
+
+
+    </div>
+    <div id="barcode" class="col-sm-3 col-xs-12"></div>
+</div>
+<div class="row">
+  <div class="col-xs-6">
+    <div class="row">
+      <div id="imports" class="col-xs-9"></div>
+      <div id="sparklineI" class="col-xs-3"></div>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="row">
+      <div id="exports" class="col-xs-9"></div>
+      <div id="sparklineE" class="col-xs-3"></div>
+    </div>
+  </div>
+<div>
+
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <script src="https://cdn.ons.gov.uk/vendor/pym/1.3.2/pym.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-queue/3.0.7/d3-queue.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="lib/svg-pan-zoom.min.js"></script>
+    <script src="lib/modernizr.custom.56904.js"></script>
+	<script src="lib/script.js"></script>
+    
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MBCBVQS');
+</script>
+
+
+
+</body>
+</html>
