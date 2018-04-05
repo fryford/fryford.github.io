@@ -11,7 +11,7 @@ if (Modernizr.inlinesvg) {
 
 function ready (error, dataexports, dataimports, config, geog){
 
-  var margin = {top: 40, right: 10, bottom: 40, left: 80};
+  var margin = {top: 40, right: 10, bottom: 40, left: 5};
               //width = 960 - margin.left - margin.right,
               //height = 500 - margin.top - margin.bottom;
   width=parseInt(d3.select("#mapDiv").style("width"));
@@ -234,38 +234,35 @@ xMax = d3.max([xMaxI,xMaxE])
 x.domain([0,xMax])
 
 svgBarI.select(".x")
-	.transition()
 	.call(xAxis);
 
 yImport.domain(top5codesI);
 
 svgBarI.select('.y')
-      .transition()
       .call(yAxisImport);
 
 svgBarI.selectAll(".barsI").selectAll('rect')
     .data(barsI)
     .attr("y", function(d){return yImport(d.name)})
-    .transition()
     .attr("width", function(d){return x(d.amt)})
     .attr("height", yImport.bandwidth()/3)
 	
 svgBarE.select(".x")
-	.transition()
 	.call(xAxis);
 
 yExport.domain(top5codesE);
 
 svgBarE.select('.y')
-      .transition()
       .call(yAxisExport);
 
 svgBarE.selectAll(".barsE").selectAll('rect')
     .data(barsE)
     .attr("y", function(d){return yExport(d.name)})
-    .transition()
     .attr("width", function(d){return x(d.amt)})
     .attr("height", yExport.bandwidth()/3)
+
+
+
 
 //sparkline stuff Imports
 
@@ -303,17 +300,6 @@ svgSparkI.select('#sparkyI').selectAll('path')
         });
 
 
-yImport.domain(top5codesI)
-svgBarI.select('.y')
-      .transition()
-      .call(yAxisImport);
-
-svgBarI.selectAll(".barsI").selectAll('rect')
-    .data(barsI)
-    .attr("y", function(d){return yImport(d.name)})
-    .transition()
-    .attr("width", function(d){return x(d.amt)})
-    .attr("height", yImport.bandwidth()/3)
 
 //sparkline stuff
 
@@ -386,18 +372,9 @@ svgSparkE.select('#sparkyE').selectAll('path')
             return lineE(d.value);
         });
 
+//adjust text position
 
-yExport.domain(top5codesE)
-svgBarE.select('.y')
-      .transition()
-      .call(yAxisExport);
-
-svgBarE.selectAll(".barsE").selectAll('rect')
-    .data(barsE)
-    .attr("y", function(d){return yExport(d.name)})
-    .transition()
-    .attr("width", function(d){return x(d.amt)})
-    .attr("height", yExport.bandwidth()/3)
+d3.selectAll(".y text").attr("x", 5);
 
 //sparkline stuff
 
@@ -844,6 +821,11 @@ xAxis = d3.axisBottom(x)
           .append('rect')
           .attr("fill", "steelblue")
           .attr("x", function(d){return x(0)})
+		  
+//adjust text position
+
+d3.selectAll(".y text").attr("x", 5);	
+
 
 //here be some stuff for making sparklines
 xspark = d3.scaleTime()
