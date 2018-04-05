@@ -248,7 +248,7 @@ svgBarI.selectAll(".barsI").selectAll('rect')
     .attr("y", function(d){return yImport(d.name)})
     .transition()
     .attr("width", function(d){return x(d.amt)})
-    .attr("height", yImport.bandwidth())
+    .attr("height", yImport.bandwidth()/3)
 	
 svgBarE.select(".x")
 	.transition()
@@ -265,7 +265,7 @@ svgBarE.selectAll(".barsE").selectAll('rect')
     .attr("y", function(d){return yExport(d.name)})
     .transition()
     .attr("width", function(d){return x(d.amt)})
-    .attr("height", yExport.bandwidth())
+    .attr("height", yExport.bandwidth()/3)
 
 //sparkline stuff Imports
 
@@ -313,7 +313,7 @@ svgBarI.selectAll(".barsI").selectAll('rect')
     .attr("y", function(d){return yImport(d.name)})
     .transition()
     .attr("width", function(d){return x(d.amt)})
-    .attr("height", yImport.bandwidth())
+    .attr("height", yImport.bandwidth()/3)
 
 //sparkline stuff
 
@@ -397,7 +397,7 @@ svgBarE.selectAll(".barsE").selectAll('rect')
     .attr("y", function(d){return yExport(d.name)})
     .transition()
     .attr("width", function(d){return x(d.amt)})
-    .attr("height", yExport.bandwidth())
+    .attr("height", yExport.bandwidth()/3)
 
 //sparkline stuff
 
@@ -765,32 +765,32 @@ x = d3.scaleLinear()
           .range([ 0, (width/2)- margin.left - margin.right]);
 
 yImport = d3.scaleBand()
-          .rangeRound([0, height/3])
+          .rangeRound([0, height/2])
           .paddingInner(0.1);
 
 yExport = d3.scaleBand()
-          .rangeRound([0, height/3])
+          .rangeRound([0, height/2])
           .paddingInner(0.1);
 
 yAxisImport = d3.axisLeft(yImport)
 yAxisExport = d3.axisLeft(yExport)
 
 xAxis = d3.axisBottom(x)
-	.tickSize(-height/3, 0, 0)
+	.tickSize(-height/2, 0, 0)
 	.ticks(5);
 
 	svgBarI = d3.select('#imports').append('svg')
         .attr("id","importsChart")
         .style("background-color","#fff")
         .attr("width", (width/2) )
-        .attr("height", (height/3)+ margin.top + margin.bottom)
+        .attr("height", (height/2)+ margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
     svgBarI.append('g')
          .attr('class', 'x axis')
-         .attr("transform", "translate(0, "+height/3+")")
+         .attr("transform", "translate(0, "+height/2+")")
          .call(xAxis)
          .append("text")
          .attr("y", 25)
@@ -816,14 +816,14 @@ xAxis = d3.axisBottom(x)
         .attr("id","exportsChart")
         .style("background-color","#fff")
         .attr("width", (width/2) )
-        .attr("height", (height/3)+ margin.top + margin.bottom)
+        .attr("height", (height/2)+ margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
     svgBarE.append('g')
          .attr('class', 'x axis')
-         .attr("transform", "translate(0, "+height/3+")")
+         .attr("transform", "translate(0, "+height/2+")")
          .call(xAxis)
          .append("text")
          .attr("y", 25)
@@ -1043,7 +1043,7 @@ svgSparkE = d3.select("#sparklineE")
               .attr("id","sparkchartE")
               //.style("background-color","#fff")
 							.attr("width", width/6)
-							.attr("height", height/3 + margin.top + margin.bottom )  //+30)
+							.attr("height", height/2 + margin.top + margin.bottom )  //+30)
 							.append("g")
               .attr("transform", "translate(" + 2 + "," + margin.top + ")");
 
