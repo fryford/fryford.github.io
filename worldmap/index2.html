@@ -6,28 +6,105 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
 	<!--<script src="lib/d3.v3.min.js"></script>-->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link href="lib/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="bootstrap-grid.css">
 
 <style>
 	body {
-		max-width:800px;	
+		max-width:800px;
+        font-family: "Open Sans", sans-serif;
+        color:
 	}
-
+    
+    #chartsnsparks {
+        background-color: #F9F9F9;
+    }
+	
+	#source {
+		font-size: 14px;
+	    font-weight: 700;
+		margin-top:5px;
+	}
+	
+	#importlabel, #exportlabel {
+		font-size:14px;
+		height:0px;
+		pointer-events:none;
+		line-height: 0.5;
+		text-align:center;
+	}
+	
+	.labelbold {
+		font-weight:bold;
+	}
+    
+	
+	
+	
+	@media (min-width: 600px) {
+    
+	#tradewith {
+        font-size:20px;
+        font-weight:bold;
+        margin-left:30px;
+    }
+	
+	#barcodelabels {
+		font-size:20px;
+	}
+	
+	}
+	
+	@media (max-width: 599px) {
+    
+	#tradewith {
+        font-size:16px;
+        font-weight:bold;
+        margin-left:5px;
+    }
+	
+	#barcodelabels {
+		position:absolute;
+		top:50px;
+		font-size:16px;
+		margin-left:5px;
+	}
+	
+	#importlabel {
+		position:absolute;
+		top:25px;
+		font-size:14px;
+		height:0px;
+		pointer-events:none;
+		text-align:center;
+	}
+	
+	#exportlabel {
+		position:absolute;
+		top:75px;
+		font-size:14px;
+		height:0px;
+		pointer-events:none;
+		text-align:center;
+	}
+	
+	}
+    
 	.countries {
-		stroke: #EAEAEA;
+		stroke: #5F7682;
     	stroke-width: 0.05%;
-    	fill: #5F7682;	
+    	fill: #EAEAEA;	
 		cursor:pointer;
 	}
 	
 	.countries_highlights {
-    	fill: #E2BC22;	
+    	fill: #00A7A3;
+        fill-opacity:0.5; 
 	}
 	
 	.axis text {
-		fill: #333;
+		fill: #323132;
 		font-size: 11px;
 		font-family: Arial, Helvetica, sans-serif;
 	}
@@ -39,15 +116,25 @@
 	#selectNav {
 		position: absolute;
 		top: 10px;
-		left: 10px;
-		width: 100%;
-		max-width: 800px;
 		z-index: 2;	
+		max-width: 800px;
 	}
 	
 	.y {
 		text-anchor: start;	
 	}
+    
+    .x .tick line, .axis .tick line {
+        stroke:#ccc;
+        stroke-width:1px;
+    }
+    
+    .y .tick line, .x .axis .tick line {
+        stroke:none;
+    }
+
+
+
 	
 	
 
@@ -66,7 +153,7 @@
 		height: 22px;
 		text-align: center;
 		text-decoration: none;
-		color: #5381ca;
+		color: #323132;
 	}
 
 	.zoom-control-zoom-in {
@@ -76,7 +163,7 @@
 
 	.zoom-control-zoom-in:hover {
 			color: #fff;
-			background-color: #5381ca;
+			background-color: #323132;
 	}
 
 	.zoom-bar-part {
@@ -91,7 +178,7 @@
 
 	.zoom-control-zoom-out:hover {
 		color: #fff;
-		background-color: #5381ca;
+		background-color: #323132;
 	}
 
 	.zoom-bar-part-bottom {
@@ -100,14 +187,14 @@
 
 	.zoom-container {
 		margin-left: 13px;
-		margin-top: 85px;
+		margin-top: 55px;
 		position: absolute;
 		left: 0px;
 		top: 0px;
 	}
 
 	.zoom-bar {
-		border: 1px solid #59a4da;
+		border: 1px solid #323132;
 	}
 
 	.zoom-popup-pane, .zoom-control {
@@ -128,9 +215,9 @@
 
 </head>
 <body>
+<div id="selectNav" class="col-sm-4 col-xs-12"></div>
 <div class="row">
-	<div id="selectNav"></div>
-	<div class="zoom-container zoom-control-zoom zoom-bar zoom-control">
+	<div class="zoom-container zoom-control-zoom zoom-bar zoom-control hidden-xs">
     	<a class="zoom-control-zoom-in zoom-bar-part zoom-bar-part-top" title="Zoom in">+</a>
         <a class="zoom-control-zoom-out zoom-bar-part zoom-bar-part-bottom" title="Zoom out">-</a>
     </div>
@@ -140,20 +227,24 @@
     </div>
     <div id="barcode" class="col-sm-3 col-xs-12"></div>
 </div>
-<div class="row">
-  <div class="col-xs-6">
+<div class="row" id="chartsnsparks">
+    <div id="tradewith">Overall UK trade <span style="font-weight:300">2016</span></div>
+  <div class="col-sm-6 col-xs-12">
     <div class="row">
       <div id="imports" class="col-xs-9"></div>
       <div id="sparklineI" class="col-xs-3"></div>
     </div>
   </div>
-  <div class="col-xs-6">
+  <div class="col-sm-6 col-xs-12">
     <div class="row">
       <div id="exports" class="col-xs-9"></div>
       <div id="sparklineE" class="col-xs-3"></div>
     </div>
   </div>
-<div>
+</div>
+<div class="row" id="source">
+	Source: UK Trade, Office for National Statistics
+</div>
 
 
     <script src="https://d3js.org/d3.v4.min.js"></script>

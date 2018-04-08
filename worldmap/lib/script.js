@@ -1,5 +1,6 @@
 if (Modernizr.inlinesvg) {
 
+var pymChild = new pym.Child();
 
   d3.queue()
           .defer(d3.csv, "exports.csv")
@@ -11,11 +12,13 @@ if (Modernizr.inlinesvg) {
 
 function ready (error, dataexports, dataimports, config, geog){
 
-  var margin = {top: 40, right: 10, bottom: 40, left: 5};
+  var margin = {top: 40, right: 20, bottom: 40, left: 30};
               //width = 960 - margin.left - margin.right,
               //height = 500 - margin.top - margin.bottom;
-  width=parseInt(d3.select("#mapDiv").style("width"));
-  height=width*0.55
+  width=parseInt(d3.select("body").style("width"))*0.75;
+  height=width*0.58
+  
+  mobileBreak = 600;
 
   var path = d3.geoPath();
 
@@ -41,18 +44,18 @@ function ready (error, dataexports, dataimports, config, geog){
 	gradient.append("stop")
 	   .attr('class', 'start')
 	   .attr("offset", "0%")
-	   .attr("stop-color", "#008080")
+	   .attr("stop-color", "#B8860B")
 	   .attr("stop-opacity", 1);
 	
 	gradient.append("stop")
 	   .attr('class', 'end')
 	   .attr("offset", "100%")
-	   .attr("stop-color", "#36ADD9")
+	   .attr("stop-color", "#D2376D")
 	   .attr("stop-opacity", 1);
 
   var projection = d3.geoNaturalEarth1()
                      .scale(width*0.21)
-                     .translate( [width/2, height/2+(height/2)*0.15]);
+                     .translate( [(width/2)-20, height/2+(height/2)*0.2]);
 
   var path = d3.geoPath().projection(projection);
 
@@ -70,6 +73,7 @@ function ready (error, dataexports, dataimports, config, geog){
       })
 	  .on("mouseout",function(d){
 		unhighlightcountry(d.properties.fips);
+        filterdata("Total");
       })
 	  
 	  var m = svgPanZoom("#svgMap", {
@@ -94,6 +98,7 @@ createBarcode();
 selectList();
 enableZoom();
 barChartInitial();
+
 
 //gets the last year in the dataset
 function getLastYear(){
@@ -195,8 +200,9 @@ console.log(d3.entries(newarrayI))
 
 perchangeI=[]
 for(var i=0;i<top5codesI.length;i++){
-  console.log()
-  perchangeI[i]=(newarrayI[top5codesI[i]][top5codesI.length-1].amt-newarrayI[top5codesI[i]][0].amt)/newarrayI[top5codesI[i]][0].amt
+    console.log()
+    perchangeI[i]=(newarrayI[top5codesI[i]][top5codesI.length-1].amt-newarrayI[top5codesI[i]][0].amt)/newarrayI[top5codesI[i]][0].amt
+     console.log(perchangeI[i])
 }
 
 perchangeE=[]
@@ -204,8 +210,6 @@ for(var i=0;i<top5codesE.length;i++){
   console.log()
   perchangeE[i]=(newarrayE[top5codesE[i]][top5codesE.length-1].amt-newarrayE[top5codesE[i]][0].amt)/newarrayE[top5codesE[i]][0].amt
 }
-
-console.log(perchangeI)
 
 //stuff for bar charts
 barsI = []
@@ -234,6 +238,7 @@ xMax = d3.max([xMaxI,xMaxE])
 x.domain([0,xMax])
 
 svgBarI.select(".x")
+    .transition()
 	.call(xAxis);
 
 yImport.domain(top5codesI);
@@ -243,11 +248,13 @@ svgBarI.select('.y')
 
 svgBarI.selectAll(".barsI").selectAll('rect')
     .data(barsI)
+    .transition()
     .attr("y", function(d){return yImport(d.name)})
     .attr("width", function(d){return x(d.amt)})
     .attr("height", yImport.bandwidth()/3)
 	
 svgBarE.select(".x")
+    .transition()
 	.call(xAxis);
 
 yExport.domain(top5codesE);
@@ -257,11 +264,19 @@ svgBarE.select('.y')
 
 svgBarE.selectAll(".barsE").selectAll('rect')
     .data(barsE)
+    .transition()
     .attr("y", function(d){return yExport(d.name)})
     .attr("width", function(d){return x(d.amt)})
     .attr("height", yExport.bandwidth()/3)
 
+//adjust text position
 
+d3.selectAll(".y text")
+    .attr("transform","translate(14,3)")
+    .attr("stroke","#fff")
+    .attr("stroke-width","3px")
+    .attr("paint-order","stroke")
+	//.each(fadeToFront2);
 
 
 //sparkline stuff Imports
@@ -286,7 +301,7 @@ svgSparkI.select('.ysparkI')
 
 svgSparkI.select('#sparkyI').selectAll('path')
         .data(d3.entries(newarrayI))
-        .style("stroke",function(d,i){return colour_palette[i];})
+        .style("stroke",colour_palette[0])
         .attr("transform",function(d,i){
           if(i!=0){
             return "translate(0,"+(i*yImport.bandwidth()+i*yImport.bandwidth()/10+yImport.bandwidth()/20)+")"}
@@ -325,7 +340,7 @@ svgSparkI.select('.ysparkI').select(".domain").remove();
 
 svgSparkI.select('#sparkyI').selectAll('path')
         .data(d3.entries(newarrayI))
-        .style("stroke",function(d,i){return colour_palette[i];})
+        .style("stroke",colour_palette[0])
         .attr("transform",function(d,i){
           if(i!=0){
             return "translate(0,"+(i*yImport.bandwidth()+i*yImport.bandwidth()/10+yImport.bandwidth()/20)+")"}
@@ -359,7 +374,7 @@ svgSparkE.select('.ysparkE')
 
 svgSparkE.select('#sparkyE').selectAll('path')
         .data(d3.entries(newarrayE))
-        .style("stroke",function(d,i){return colour_palette[i];})
+        .style("stroke",colour_palette[1])
         .attr("transform",function(d,i){
           if(i!=0){
             return "translate(0,"+(i*yExport.bandwidth()+i*yExport.bandwidth()/10+yExport.bandwidth()/20)+")"}
@@ -372,9 +387,7 @@ svgSparkE.select('#sparkyE').selectAll('path')
             return lineE(d.value);
         });
 
-//adjust text position
 
-d3.selectAll(".y text").attr("x", 5);
 
 //sparkline stuff
 
@@ -400,7 +413,7 @@ svgSparkE.select('.ysparkE').select(".domain").remove();
 
 svgSparkE.select('#sparkyE').selectAll('path')
         .data(d3.entries(newarrayE))
-        .style("stroke",function(d,i){return colour_palette[i];})
+        .style("stroke",colour_palette[1])
         .attr("transform",function(d,i){
           if(i!=0){
             return "translate(0,"+(i*yExport.bandwidth()+i*yExport.bandwidth()/10+yExport.bandwidth()/20)+")"}
@@ -422,7 +435,7 @@ svgSparkE.select('#sparkyE').selectAll('path')
   .style("font-size", "12px")
   .style("fill", "#666")
   .transition()
-  .text(function(d){return d3.format(",.0%")(d)});
+  .text(function(d){if(isFinite(d) == true){return d3.format(",.0%")(d)} else {return "-"}});
   
 d3.select(".perchangeE").selectAll('text')
   .data(perchangeE)
@@ -432,7 +445,8 @@ d3.select(".perchangeE").selectAll('text')
   .style("font-size", "12px")
   .style("fill", "#666")
   .transition()
-  .text(function(d){return d3.format(",.0%")(d)});
+  .text(function(d){if(isFinite(d) == true){return d3.format(",.0%")(d)} else {return "-"}});
+  
 // })
 
 }//end filterdata
@@ -474,40 +488,67 @@ function getCentroids() {
 
 
 function highlightcountry(countrycode) {
+    
 	
+    
+	//Update dropdown
 	$("#areaselect").val(countrycode).trigger('change.select2');
 	
-	d3.selectAll("." + countrycode).each(fadeToFront);
+    //Draw barcode highlight rects on top of all bars
+	if(mobile == false) {
+		
+		console.log("I'm here");
+		d3.selectAll("." + countrycode).each(fadeToFront);
+		//Give map area a highlight class
+		d3.select("#shape" + countrycode).classed("countries_highlights",true);
+		
+		
+		//Draw arc from UK to destination
+		var coordsfrom = d3.select("#shapeUK").attr("data-cd");
 	
-	d3.select("#shape" + countrycode).classed("countries_highlights",true);
+		var coordsto = d3.select("#shape" + countrycode).attr("data-cd");
 	
-	var coordsfrom = d3.select("#shapeUK").attr("data-cd");
-
-	var coordsto = d3.select("#shape" + countrycode).attr("data-cd");
-
-	lines = [];
+		lines = [];
+		
+		lines.push({
+			type: "LineString",
+			coordinates: JSON.parse("[" + coordsto + "," + coordsfrom + "]")
+		});
+		
+		
+		d3.select(".allcountry").selectAll(".mapArcsLow")
+			.data(lines)
+			.enter()
+			.append("path")
+			.attr("class", "mapArcsLow")
+			.attr("d",path)
+			.attr("stroke", "url(#svgGradient)")
+			.attr("stroke-width", "2px")
+			.style("stroke-linecap", 'round')
+			.style("stroke-linejoin", 'round')
+			.attr("fill","none")
+			.attr("pointer-events", "none");
+    
+		
+	} else {
+		d3.selectAll("." + countrycode).each(fadeToFront1);
+	}
 	
-	lines.push({
-		type: "LineString",
-		coordinates: JSON.parse("[" + coordsto + "," + coordsfrom + "]")
-	});
+	//Get total values for imports/exports
+	var importval = d3.select("#" + countrycode + "_I").attr("data-nm");
+	var exportval = d3.select("#" + countrycode + "_E").attr("data-nm");
 	
-	console.log
+	//barcode labels
+	d3.select("#importlabel").html("<p>Imports</p><p class='labelbold'>£"+ importval +"</p>")
+	d3.select("#exportlabel").html("<p>Exports</p><p class='labelbold'>£"+ exportval +"</p>")
+    
 	
-	
-	d3.select(".allcountry").selectAll(".mapArcsLow")
-		.data(lines)
-		.enter()
-		.append("path")
-		//.attr("id",function(d,i) {return "arc" + arraynm2[i][1]})
-		.attr("class", "mapArcsLow")
-		.attr("d",path)
-		.attr("stroke", "url(#svgGradient)")
-		.attr("stroke-width", "2px")
-		.style("stroke-linecap", 'round')
-      	.style("stroke-linejoin", 'round')
-		.attr("fill","none")
-		.attr("pointer-events", "none");
+    //Get country name
+    a = areacodes.indexOf(countrycode);
+    countryname = areanames[a]
+    
+    //Update labels
+    d3.select("#tradewith").html("UK trade with " + countryname + " <span style='font-weight:300'>2016</span>") 
 
 	
 } //end highlightcountry
@@ -516,24 +557,40 @@ function highlightcountry(countrycode) {
 
 function unhighlightcountry(countrycode) {
 	
+	//update dropdown
+	$("#areaselect").val("").trigger('change.select2');
+	
+	console.log(countrycode);
 	d3.select("#shape" + countrycode).classed("countries_highlights",false);
 	d3.select(".mapArcsLow").remove();
 	d3.selectAll(".highlights").remove();
+    
+    //Update labels
+    d3.select("#tradewith").html("Overall UK trade <span style='font-weight:300'>2016</span>") 
+	
+	d3.select("#shape" + countrycode).classed("countries_highlights",false);
+	
+	//reset barcode labels
+	d3.select("#importlabel").html("<p>Imports</p>")
+	d3.select("#exportlabel").html("<p>Exports</p>")
+
 } //end unhighlightcountry
 
 
 function createBarcode(){
+    
+
+    
+    //Get data
 	barcodeimports = dataimports.filter(function(d){return d.Year==lastyear});
 	barcodeexports = dataexports.filter(function(d){return d.Year==lastyear});
 
 	var barcodeWidth=parseInt(d3.select("#barcode").style("width"));
 
-	var barcodemargin = [40,0, 10, 60];
-
-	var gap = 10;
-
-	var barWidth = (barcodeWidth - barcodemargin[3] - gap) / 2;
-
+	var barcodemarginDT = [40,0, 10, 40];
+	var barcodemarginMB = [80,0, 30, 90];
+	
+	
 	var importsTotals = barcodeimports.map(function(d,i) {
 	  return {
 		CountryName: d.CountryName,
@@ -549,19 +606,49 @@ function createBarcode(){
 		total: d.Total
 	  };
 	});
-
-
-	//LET'S FIND OUT MORE ABOUT THE DATA
+    
 	//find max values of entire arrays (so that scale is kept constant)(first value is max)
 	maxValue = d3.max([d3.max(barcodeimports, function(d) { return +d.Total;}), d3.max(barcodeexports, function(d) { return +d.Total;})]);
+	
+	chartWidth=parseInt(d3.select("#chartsnsparks").style("width"));
+	
+	if(chartWidth > mobileBreak) {
+		
+	mobile = false;
+	
+    //add labels
+    
+    barcodeLabels = d3.select("#barcode")
+        .append("div")
+		.attr("id","barcodelabels")
+		.attr("class","hidden-xs")
+		.html("<span style='font-weight:bold'>UK Trade</span> 2016")
+		.append("div")
+        .style("padding-left",barcodemarginDT[3] + "px")
+        .style("padding-right",barcodemarginDT[1] + "px")
+        .style("width","calc(100%-" + barcodemarginDT[3]+ " - " + barcodemarginDT[1] + ")" )
+        .style("height","10px")
+		
+    
+    barcodeLabels.append("div").attr("id","importlabel").attr("class","col-sm-6").html("<p>Imports</p>");
+    barcodeLabels.append("div").attr("id","exportlabel").attr("class","col-sm-6").html("<p>Exports</p>");
 
-	barcodeHeight=parseInt(d3.select("#mapDiv").style("height"));
+	var gap = 10;
+
+	var barWidth = (barcodeWidth - barcodemarginDT[3] - gap) / 2;
+
+	
+
+
+	
+
+	barcodeHeight=parseInt(d3.select("#mapDiv").style("height"))-25;
 	barcodeWidth=parseInt(d3.select("#barcode").style("width"));
 
 	//create y axis scale
 	barcodeyScale=d3.scaleLinear()
 		.domain([0,maxValue])
-		.range([barcodeHeight-barcodemargin[0]-barcodemargin[2],0]);
+		.range([barcodeHeight-barcodemarginDT[0]-barcodemarginDT[2],0]);
 
 	barcodePlot = d3.select("#barcode").append("svg")
 		.attr("id","barcodeplot")
@@ -571,11 +658,12 @@ function createBarcode(){
 	//create main axis
 	yAxisChar=d3.axisLeft()
 		.scale(barcodeyScale)
+        .tickSize(barcodeWidth)
 		.ticks(5);
 
 	barcodeArea = barcodePlot.append("g")
 		.attr("class","axis")
-		.attr("transform","translate(" + barcodemargin[3] + "," + barcodemargin[0]+ ")")
+		.attr("transform","translate(" + (barcodemarginDT[3]+barcodeWidth) + "," + barcodemarginDT[0]+ ")")
 		.call(yAxisChar);
 
 	barcodeArea.append("g")
@@ -584,13 +672,14 @@ function createBarcode(){
 		.enter()
 		.append("rect")
 		.attr("id", function(d){return d.CountryId + "_I"})
+		.attr("data-nm", function(d) {return d.total})
 		.attr("fill","#f362b7")
 		.attr("fill-opacity",0.2)
 		.attr("stroke","#fff")
 		.attr("stroke-opacity","0")
 		.attr("stroke-width","2px")
 		.attr("class", function(d){return "barcodeBarI " + d.CountryId})
-		//.attr("transform", "translate(" + barcodemargin[3] + ",0)")
+		.attr("transform", "translate(" + eval(-barcodeWidth) + ",0)")
 		.attr("y", function(d) {
 				return barcodeyScale(Math.max(0, d.total));
 		})
@@ -608,13 +697,14 @@ function createBarcode(){
 		.enter()
 		.append("rect")
 		.attr("id", function(d){return d.CountryId + "_E"})
+		.attr("data-nm", function(d) {return d.total})
 		.attr("fill","#B8860B")
 		.attr("fill-opacity",0.2)
 		.attr("stroke","#fff")
 		.attr("stroke-opacity","0")
 		.attr("stroke-width","2px")
 		.attr("class", function(d){return "barcodeBare " + d.CountryId})
-		.attr("transform", "translate(" + eval(barWidth + gap) + ",0)")
+		.attr("transform", "translate(" + eval(barWidth + gap - barcodeWidth) + ",0)")
 		.attr("y", function(d) {
 				return barcodeyScale(Math.max(0, d.total));
 		})
@@ -625,7 +715,101 @@ function createBarcode(){
 			filterdata(this.id.slice(0, 2));
 		})
 		.on("mouseout", function(){unhighlightcountry(this.id.slice(0, 2))});
-
+	} else {
+		
+		mobile = true;
+		
+		 barcodeLabels = d3.select("#barcode")
+			.append("div")
+			.attr("id","barcodelabels")
+			.attr("class","hidden-sm")
+			.html("<span style='font-weight:bold'>UK Trade</span> 2016")
+			.append("div")
+		
+		barcodeLabels.append("div").attr("id","importlabel").attr("class","col-sm-6").html("<p>Imports</p>");
+		barcodeLabels.append("div").attr("id","exportlabel").attr("class","col-sm-6").html("<p>Exports</p>");
+	
+		var gap = 6;
+	
+		barcodeHeight=200;
+		barcodeWidth=chartWidth;
+		
+		var barHeight = (barcodeHeight - barcodemarginMB[0] - barcodemarginMB[2] - gap) / 2;
+		
+	
+	
+		//create y axis scale
+		barcodeyScale=d3.scaleLinear()
+			.domain([0,maxValue])
+			.range([0,barcodeWidth-barcodemarginMB[1]-barcodemarginMB[3]]);
+	
+		barcodePlot = d3.select("#barcode").append("svg")
+			.attr("id","barcodeplot")
+			.attr("width",barcodeWidth)
+			.attr("height",barcodeHeight);
+	
+		//create main axis
+		xAxisChar=d3.axisBottom()
+			.scale(barcodeyScale)
+			.tickSize(barcodeHeight-barcodemarginMB[0] - barcodemarginMB[2])
+			.ticks(5);
+	
+		barcodeArea = barcodePlot.append("g")
+			.attr("class","axis")
+			.attr("transform","translate(" + barcodemarginMB[3] +"," + barcodemarginMB[0] + ")")
+			.call(xAxisChar);
+	
+		barcodeArea.append("g")
+			.selectAll(".barcodeBarI")
+			.data(importsTotals)
+			.enter()
+			.append("rect")
+			.attr("id", function(d){return d.CountryId + "_I"})
+			.attr("data-nm", function(d) {return d.total})
+			.attr("fill","#f362b7")
+			.attr("fill-opacity",0.2)
+			.attr("stroke","#fff")
+			.attr("stroke-opacity","0")
+			.attr("stroke-width","2px")
+			.attr("class", function(d){return "barcodeBarI " + d.CountryId})
+			.attr("transform", "translate(0,0)")
+			.attr("x", function(d) {
+					return barcodeyScale(Math.max(0, d.total));
+			})
+			.attr("width","2px")
+			.attr("height",barHeight)
+			.on("mouseover", function(){
+				highlightcountry(this.id.slice(0, 2))
+				filterdata(this.id.slice(0, 2));
+			})
+			.on("mouseout", function(){unhighlightcountry(this.id.slice(0, 2))});
+	
+		barcodeArea.append("g")
+			.selectAll(".barcodeBarE")
+			.data(exportsTotals)
+			.enter()
+			.append("rect")
+			.attr("id", function(d){return d.CountryId + "_E"})
+			.attr("data-nm", function(d) {return d.total})
+			.attr("fill","#B8860B")
+			.attr("fill-opacity",0.2)
+			.attr("stroke","#fff")
+			.attr("stroke-opacity","0")
+			.attr("stroke-width","2px")
+			.attr("class", function(d){return "barcodeBarE " + d.CountryId})
+			.attr("transform", "translate(0," + (barHeight + gap) + ")")
+			.attr("x", function(d) {
+					return barcodeyScale(Math.max(0, d.total));
+			})
+			.attr("width","2px")
+			.attr("height",barHeight)
+			.on("mouseover", function(){
+				highlightcountry(this.id.slice(0, 2))
+				filterdata(this.id.slice(0, 2));
+			})
+			.on("mouseout", function(){unhighlightcountry(this.id.slice(0, 2))});
+		
+	}
 
 } // end createBarcode
 
@@ -653,13 +837,49 @@ function fadeToFront() {
 		.style("fill-opacity", 1.0)
 		.on("end", function() {
 
-			//When the fade-in is complete, add the click event…
-			//d3.select(this)
+		})
 
-			//…and delete the original
-			//orig.remove();
+
+} //end fadeToFront
+
+function fadeToFront1() {
+
+	//Select this element, that we want to move to front
+	var orig = d3.select(this);
+	var origNode = orig.node();
+
+	//Clone it, and append the copy on "top" (meaning, at the end of
+	var dupe = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), origNode.nextSibling));
+
+	//Make the new element transparent immediately, then fade it in over time
+	dupe.style("fill-opacity", 0.3)
+		.style("pointer-events","none")
+		.attr("fill", "black")
+		.attr("width","3px")
+		.classed("highlights",true)
+		.transition()
+		.duration(200)
+		.style("fill-opacity", 1.0)
+		.on("end", function() {
 
 		})
+
+
+} //end fadeToFront
+
+function fadeToFront2() {
+
+	//Select this element, that we want to move to front
+	var orig = d3.select(this);
+	var origNode = orig.node();
+
+	//Clone it, and append the copy on "top" (meaning, at the end of
+	var dupe = d3.select(origNode.parentNode.appendChild(origNode.cloneNode(true), origNode.nextSibling));
+
+	//Make the new element transparent immediately, then fade it in over time
+	dupe.attr("stroke", "none")
+		.attr("paint-order",null)
+		.attr("stroke-width",null);
 
 
 } //end fadeToFront
@@ -669,14 +889,14 @@ function selectList() {
 	
 	latestcountrydataI = dataimports.filter(function(d){return d.Year==lastyear})
 
-	var areacodes =  latestcountrydataI.map(function(d) { return d.CountryId; });
-	var areanames =  latestcountrydataI.map(function(d) { return d.CountryName; });
+	areacodes =  latestcountrydataI.map(function(d) { return d.CountryId; });
+	areanames =  latestcountrydataI.map(function(d) { return d.CountryName; });
 	var menuarea = d3.zip(areanames,areacodes).sort(function(a, b){ return d3.ascending(a[0], b[0]); });
 
 	// Build option menu for occupations
 	var optns = d3.select("#selectNav").append("div").attr("id","sel").append("select")
 		.attr("id","areaselect")
-		.attr("style","width:30%")
+		.attr("style","width:95%")
 		.attr("class","chosen-select");
 
 
@@ -694,8 +914,12 @@ function selectList() {
 	$('#areaselect').on('change',function(){
 
 			if($('#areaselect').val() != "") {
-				
-					areacode = $('#areaselect').val()
+					
+					d3.selectAll(".countries_highlights").classed("countries_highlights",false);
+					d3.select(".mapArcsLow").remove();
+					d3.selectAll(".highlights").remove();
+												
+					areacode = $('#areaselect').val();
 
 					highlightcountry(areacode);
         			filterdata(areacode);
@@ -703,12 +927,14 @@ function selectList() {
 					disableHoverEvents();
 					
 			}
-			else {
-					enableHoverEvents();
-			}
 
 	});
 
+	$("#areaselect").on("select2:unselect", function (e) {
+					unhighlightcountry(areacode);
+					enableHoverEvents();
+	});
+	
 }; // end selectlist
 
 
@@ -738,8 +964,19 @@ function enableZoom() {
 function barChartInitial() {
 //make a bar chart
 
+chartWidth=parseInt(d3.select("#chartsnsparks").style("width"));
+
+if(mobile == false) {
+	chartWidth = (chartWidth*0.75)/2	
+	
+} else {
+	chartWidth = (chartWidth*0.75);
+	height = height * 2;
+}
+
+
 x = d3.scaleLinear()
-          .range([ 0, (width/2)- margin.left - margin.right]);
+          .range([ 0, chartWidth - margin.left - margin.right]);
 
 yImport = d3.scaleBand()
           .rangeRound([0, height/2])
@@ -758,8 +995,7 @@ xAxis = d3.axisBottom(x)
 
 	svgBarI = d3.select('#imports').append('svg')
         .attr("id","importsChart")
-        .style("background-color","#fff")
-        .attr("width", (width/2) )
+        .attr("width", chartWidth )
         .attr("height", (height/2)+ margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -771,7 +1007,7 @@ xAxis = d3.axisBottom(x)
          .call(xAxis)
          .append("text")
          .attr("y", 25)
-         .attr("x",3*width/8)
+         .attr("x",3*chartWidth/4)
          .attr("dy", ".71em")
          .style("text-anchor", "end")
          .attr("font-size","12px")
@@ -786,13 +1022,12 @@ xAxis = d3.axisBottom(x)
           .data([0,0,0,0,0])
           .enter()
           .append('rect')
-          .attr("fill", "steelblue")
+          .attr("fill", "#D2376D")
           .attr("x", function(d){return x(0)})
 	//Exports Bars
 	svgBarE = d3.select('#exports').append('svg')
         .attr("id","exportsChart")
-        .style("background-color","#fff")
-        .attr("width", (width/2) )
+        .attr("width", chartWidth )
         .attr("height", (height/2)+ margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -804,7 +1039,7 @@ xAxis = d3.axisBottom(x)
          .call(xAxis)
          .append("text")
          .attr("y", 25)
-         .attr("x",3*width/8)
+         .attr("x",3*chartWidth/4)
          .attr("dy", ".71em")
          .style("text-anchor", "end")
          .attr("font-size","12px")
@@ -819,7 +1054,7 @@ xAxis = d3.axisBottom(x)
           .data([0,0,0,0,0])
           .enter()
           .append('rect')
-          .attr("fill", "steelblue")
+          .attr("fill", "#B8860B")
           .attr("x", function(d){return x(0)})
 		  
 //adjust text position
@@ -829,7 +1064,7 @@ d3.selectAll(".y text").attr("x", 5);
 
 //here be some stuff for making sparklines
 xspark = d3.scaleTime()
-    .range([0, width/24]);
+    .range([0, chartWidth/12]);
 
 
 ysparkI = d3.scaleLinear()
@@ -860,14 +1095,14 @@ lineE = d3.line()
     .y(function(d) { return ysparkE(d.amt); });
 
 
-    colour_palette=["steelblue","DarkGreen","Fuchsia","IndianRed","Lavender"]
+    colour_palette =["#D2376D","#B8860B"]
 
 svgSparkI = d3.select("#sparklineI")
               .append('svg')
               .attr("id","sparkchartI")
               //.style("background-color","#fff")
-							.attr("width", width/6)
-							.attr("height", height/3 + margin.top + margin.bottom )  //+30)
+							.attr("width", chartWidth/3)
+							.attr("height", height/2 + margin.top + margin.bottom )  //+30)
 							.append("g")
               .attr("transform", "translate(" + 2 + "," + margin.top + ")");
 
@@ -1024,7 +1259,7 @@ svgSparkE = d3.select("#sparklineE")
               .append('svg')
               .attr("id","sparkchartE")
               //.style("background-color","#fff")
-							.attr("width", width/6)
+							.attr("width", chartWidth/3)
 							.attr("height", height/2 + margin.top + margin.bottom )  //+30)
 							.append("g")
               .attr("transform", "translate(" + 2 + "," + margin.top + ")");
@@ -1182,13 +1417,13 @@ svgSparkE.append('g').attr("id","sparkyE").selectAll('path')
                   d3.select("#sparklineI").select('svg')
                   .append('g')
                   .attr('class','perchangeI')
-                  .attr("transform", "translate(" + 0 + "," + margin.top + ")");
+                  .attr("transform", "translate(" + 20 + "," + margin.top + ")");
 				  
 				  
                   d3.select("#sparklineE").select('svg')
                   .append('g')
                   .attr('class','perchangeE')
-                  .attr("transform", "translate(" + 0 + "," + margin.top + ")");
+                  .attr("transform", "translate(" + 20 + "," + margin.top + ")");
 
 //things for percentage change
             dummyarrayfortext=[1,2,3,4,5]
@@ -1221,20 +1456,36 @@ d3.select('#sparklineI').select("svg")
 .append('text')
 .attr("x",0)
 .attr("y",20)
-.text("5 years change")
-.style("font-size", "12px")
+.text("5-year change")
+.style("font-size", "14px")
 .attr("font-family","'Open Sans', sans-serif");
 
 d3.select('#imports').select("svg")
 .append('text')
 .attr("x",margin.left)
 .attr("y",20)
-.text("Top 5 imports")
-.style("font-size", "12px")
+.html("Top 5 <tspan style='font-weight:bold'>import</tspan> goods")
+.style("font-size", "14px")
+.attr("font-family","'Open Sans', sans-serif");
+
+d3.select('#sparklineE').select("svg")
+.append('text')
+.attr("x",0)
+.attr("y",20)
+.text("5-year change")
+.style("font-size", "14px")
+.attr("font-family","'Open Sans', sans-serif");
+
+d3.select('#exports').select("svg")
+.append('text')
+.attr("x",margin.left)
+.attr("y",20)
+.html("Top 5 <tspan style='font-weight:bold'>export</tspan> goods")
+.style("font-size", "14px")
 .attr("font-family","'Open Sans', sans-serif");
 
 
-
+pymChild.sendHeight();
 
 
 }// end BarchartInitial
