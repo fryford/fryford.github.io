@@ -12,29 +12,29 @@
 
 <style>
 
-	
-    body { 
-		margin:0; 
-		padding:0; 
+
+    body {
+		margin:0;
+		padding:0;
 		font-family: 'Open Sans', sans-serif;
 		max-width:800px;
 		margin: 0px auto;
 		display:block;
 	}
-	
+
 	#header{
-		height:70px; 
+		height:70px;
 		width:100%
 	}
-	
+
 	.mapboxgl-ctrl-group .mapboxgl-ctrl-compass {
 		display: none;
 	}
-	
+
 	#nav {
 		width:100%;
 	}
-	
+
 	.dropdown {
 		width: 98%;
 		height: 40px;
@@ -48,18 +48,18 @@
 		background-color: #FFF;
 		margin-left: 1px;
 	}
-	
+
 	@media (min-width: 600px) {
 		#map {
-			height: 500px; 
+			height: 500px;
 			width: 100%;
 			max-width:800px;
 		}
-		
+
 		#selectnav {
 			display: none;
 		}
-		
+
 		#selectNav {
 			position:absolute;
 			top:0px;
@@ -69,7 +69,7 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
 		}
-		
+
 		#keydiv {
 			position:absolute;
 			top:40px;
@@ -79,32 +79,32 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
 		}
-		
+
 		#currVal {
 			font-size:14px;
-			
+
 		}
 	}
-	
+
 	@media (max-width: 599px) {
-		
-		 body { 
-			height: 620px;
+
+		 body {
+			/* height: 620px; */
 		}
-		
+
 		#nav {
 			display: none;
 		}
-		
-	    #map { 
-			position:absolute;
-			top:50px;
-			margin-top:120px;
-			height: 500px; 
+
+	    #map {
+			/* position:absolute; */
+			/* top:50px; */
+			margin-top:130px;
+			height: 500px;
 			width: 100%;
-			overflow:visible; 
+			overflow:visible;
 		}
-		
+
 		#selectNav {
 			position:absolute;
 			top:-120px;
@@ -114,7 +114,7 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:3;
 		}
-		
+
 		#keydiv {
 			position:absolute;
 			top:-80px;
@@ -124,22 +124,22 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:1;
 		}
-		
+
 		#currVal {
 			font-size:14px;
-			
+
 		}
-		
+
 		.mapboxgl-ctrl-fullscreen {
-			display:none !important;	
+			display:none !important;
 		}
 	}
-	
-	
+
+
 	/* Button group styles */
 
           #primary {
-			  
+
           }
 
           .btn-form {
@@ -330,7 +330,7 @@
             border-bottom: solid 1px #A6A8AB;
             width: 100%;
           }
-		  
+
 		  .form-group-fullwidth:last-child {
             border-right: solid 1px #A6A8AB;
           }
@@ -353,8 +353,18 @@
           .radio-primary-fullwidth {
             display: none;
           }
-/* Bootstrap Grid */	  
-		  
+/* Bootstrap Grid */
+
+.row:before,
+.row:after {
+  display: table;
+  content: " ";
+}
+
+.row:after {
+  clear: both;
+}
+
 .row {
   margin-right: 0px;
   margin-left: 0px;
@@ -681,13 +691,19 @@
 
 .tick line {
 	stroke: #333;
-	stroke-width:1px;	
+	stroke-width:1px;
 }
 
 .domain {
-	stroke: none;	
+	stroke: none;
 }
-	
+
+#source {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
 </style>
 
 </head>
@@ -702,8 +718,10 @@
     <div id='map' class="col-sm-12">
         <div id='keydiv'></div>
         <div id='selectNav'></div>
-    </div>   
+    </div>
 </div>
+<div class="row" id="source">Source: Office for National Statistics.</div>
+
 
 <!--<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>-->
