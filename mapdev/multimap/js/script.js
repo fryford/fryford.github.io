@@ -111,18 +111,18 @@ if(Modernizr.webgl) {
 
 		//and add properties to the geojson based on the csv file we've read in
 		areas.features.map(function(d,i) {
-		  if(!isNaN(rateById[d.properties.AREACD])) 
-		  	{d.properties.fill = color(rateById[d.properties.AREACD])} 
+		  if(!isNaN(rateById[d.properties.AREACD]))
+		  	{d.properties.fill = color(rateById[d.properties.AREACD])}
 		  else {d.properties.fill = '#ccc'};
 		});
 
 		map.on('load', defineLayers);
-		
+
 		if ($('html').hasClass('touch')) {
 			map.scrollZoom.disable();
 			map.dragPan.disable();
 		};
-		
+
 		function buildNav() {
 
 		formgroup = d3.select('#nav')
@@ -136,7 +136,7 @@ if(Modernizr.webgl) {
 					.attr("class",'form-group-fullwidth')
 					.attr("role","radio")
 					.attr("tabindex", function(d,i){return i+1})
-						
+
 		formgroup.append('input')
 			.attr("id",function(d,i){return "button" + i})
 			.attr('class','radio-primary-fullwidth')
@@ -172,7 +172,7 @@ if(Modernizr.webgl) {
 
 			rateById = {};
 			areaById = {};
-	
+
 			data.forEach(function(d) {rateById[d.AREACD] = +d[variables[a]]; areaById[d.AREACD] = d.AREANM}); //change to brackets
 
 
@@ -334,10 +334,10 @@ if(Modernizr.webgl) {
 
 			//update properties to the geojson based on the csv file we've read in
 			areas.features.map(function(d,i) {
-			   if(!isNaN(rateById[d.properties.AREACD])) 
+			   if(!isNaN(rateById[d.properties.AREACD]))
 			    {d.properties.fill = color(rateById[d.properties.AREACD])}
 			   else {d.properties.fill = '#ccc'};
-			  
+
 			});
 
 			//Reattach geojson data to area layer
@@ -378,22 +378,22 @@ if(Modernizr.webgl) {
 
 		function onMove(e) {
 			// console.log(e)
-			
+
 				map.getCanvasContainer().style.cursor = 'pointer';
-				
+
 				newAREACD = e.features[0].properties.AREACD;
-				
-				
-				
+
+
+
 				if(firsthover) {
 					dataLayer.push({
 						'event': 'hoverSelect',
-						'selected': newAREACD				
+						'selected': newAREACD
 					})
-					
+
 					firsthover = false;
 				}
-				
+
 
 				if(newAREACD != oldAREACD) {
 					oldAREACD = e.features[0].properties.AREACD;
@@ -605,6 +605,8 @@ if(Modernizr.webgl) {
 
 	} // Ends create key
 
+	pymChild.sendHeight();
+
 	function addFullscreen() {
 
 		currentBody = d3.select("#map").style("height");
@@ -681,7 +683,7 @@ if(Modernizr.webgl) {
 			var areacodes =  datacsv.map(function(d) { return d.AREACD; });
 			var areanames =  datacsv.map(function(d) { return d.AREANM; });
 			var menuarea = d3.zip(areanames,areacodes).sort(function(a, b){ return d3.ascending(a[0], b[0]); });
-	
+
 			menuarea.shift();
 			menuarea.shift();
 
@@ -712,7 +714,7 @@ if(Modernizr.webgl) {
 					//if(typeof params != 'undefined') {
 
 							//d3.select("#map").node().focus();
-							
+
 							areacode = $('#areaselect').val()
 
 							disableMouseEvents();
@@ -722,10 +724,10 @@ if(Modernizr.webgl) {
 							selectArea(areacode);
 							setAxisVal(areacode);
 							zoomToArea(areacode);
-							
+
 							dataLayer.push({
 								'event': 'dropSelect',
-								'selected': areacode				
+								'selected': areacode
 							})
 
 
