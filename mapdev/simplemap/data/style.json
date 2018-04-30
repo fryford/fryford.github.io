@@ -31,11 +31,11 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "url": "https://free.tilehosting.com/data/v3.json?key=ZBXiR1SHvcgszCLwyOFe"
+      "url": "https://maps.tilehosting.com/data/v3.json?key=7rA0yA362pBi9PZxyYlY"
     }
   },
   "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
-  "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=ZBXiR1SHvcgszCLwyOFe",
+  "glyphs": "https://maps.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=7rA0yA362pBi9PZxyYlY",
   "layers": [
     {
       "id": "background",
@@ -75,7 +75,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgb(194, 200, 202)",
+        "fill-color": "rgb(220, 220, 220)",
         "fill-antialias": true
       }
     },
@@ -1501,7 +1501,8 @@
       ],
       "layout": {
         "line-cap": "round",
-        "line-join": "round"
+        "line-join": "round",
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(230, 204, 207)",
