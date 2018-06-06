@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})
+  (window,document,'script','dataLayer','GTM-MBCBVQS');
+  </script>
   <meta charset="UTF-8">
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Map title here</title>
@@ -8,33 +11,33 @@
 
   <link href='css/mapbox-gl.css' rel='stylesheet'/>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,bold" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
 <style>
 
-	
-     body { 
-		margin:0; 
-		padding:0; 
+
+     body {
+		margin:0;
+		padding:0;
 		font-family: 'Open Sans', sans-serif;
 		max-width:800px;
 		margin: 0px auto;
 		display:block;
 	}
-	
+
 	#header{
-		height:70px; 
+		height:70px;
 		width:100%
 	}
-	
+
 	.mapboxgl-ctrl-group .mapboxgl-ctrl-compass {
 		display: none;
 	}
-	
+
 	#nav {
 		width:100%;
 	}
-	
+
 	.dropdown {
 		width: 98%;
 		height: 40px;
@@ -48,47 +51,47 @@
 		background-color: #FFF;
 		margin-left: 1px;
 	}
-	
+
 	@media (min-width: 600px) {
 		#map {
-			height: 500px; 
+			height: 500px;
 		}
-		
+
 		#horiz {
-			display:none;	
+			display:none;
 		}
-		
+
 		#selectnav {
 			display: none;
 		}
-		
-		
+
+
 		#currVal {
 			font-size:12px;
-			
+
 		}
 	}
-	
+
 	@media (max-width: 599px) {
-		
-		body { 
+
+		body {
 			height: 620px;
 		}
-		
+
 		#nav {
 			display: none;
 		}
-		
-	    #map { 
-			height: 500px; 
+
+	    #map {
+			height: 500px;
 			width: 100%;
-			overflow:visible; 
+			overflow:visible;
 		}
-		
+
 		#controls {
 			display: none;
-		}	
-		
+		}
+
 	/*	#selectNav {
 			position:absolute;
 			top:-120px;
@@ -98,35 +101,35 @@
 			background-color:rgba(255,255,255,0.8);
 			z-index:3;
 		}*/
-		
+
 		#vert {
 			display:none;
 			font-family: 'Open Sans', sans-serif !important;
 		}
-		
+
 		#chartgroup {
-			display:none;	
+			display:none;
 		}
-		
+
 		#key text {
 			font-weight:600 !important;
 		}
-		
+
 		#currVal {
 			font-size:12px;
-			
+
 		}
-		
+
 		.mapboxgl-ctrl-fullscreen {
-			display:none !important;	
+			display:none !important;
 		}
 	}
-	
-	
+
+
 	/* Button group styles */
 
           #primary {
-			  
+
           }
 
           .btn-form {
@@ -319,7 +322,7 @@
             width: 100%;
 			font-weight: 600;
           }
-		  
+
 		  .form-group-fullwidth:last-child {
             border-right: solid 1px #A6A8AB;
           }
@@ -343,8 +346,8 @@
           .radio-primary-fullwidth {
             display: none;
           }
-/* Bootstrap Grid */	  
-		  
+/* Bootstrap Grid */
+
 .row {
   margin-right: 0px;
   margin-left: 0px;
@@ -671,7 +674,7 @@
 
 /* Button styles */
 
-	
+
 	.btn {
 		font-family: "Open Sans",Helvetica,Arial,sans-serif;
 		font-weight: 400;
@@ -687,15 +690,15 @@
 		text-decoration: none;
 		line-height: 24px;
 	}
-	
+
 	.btn--bold {
 		font-weight: 600;
 	}
-	
+
 	.btn--large {
 		font-size: 16px;
 	}
-	
+
 	.btn--primary-alternative {
 		background-color: #206095;
 		color: #fff;
@@ -705,7 +708,7 @@
 	.btn--primary-alternative:hover, .btn--primary-alternative:focus {
 		background-color: #003C57;
 	}
-	
+
 	.btn--primary-disabled:hover, .btn--primary-disabled:focus {
 		background-color: #003C57;
 		cursor: not-allowed;
@@ -714,18 +717,18 @@
 	.btn--primary-disabled {
 		opacity: 0.7;
 	}
-	
-		
+
+
 	.btn--neutral:hover, .btn--neutral:focus {
 		background-color: #E5E6E7;
 	}
-		
+
 	.btn--neutral {
 		background-color: #F9F9F9;
-		border: 1px solid #A6A8AB;	
+		border: 1px solid #A6A8AB;
 	    padding: 14px 16px 10px 16px;
 	}
-	
+
 	.btn--neutral-disabled:hover, .btn--primary-disabled:focus {
 		cursor: not-allowed;
 	}
@@ -734,25 +737,25 @@
 		background-color: #eee;
 		opacity: 0.2;
 	}
-	
+
 	button {
 		cursor: pointer;
 	}
 
 	#controls, #timePeriod {
 		margin-left: 20px;
-	}	
-	
+	}
+
 	#controls {
 		padding-top: 35px;
-	}	
-	
+	}
+
 	#source{
 		font-size: 14px;
 		font-weight: 700;
-    	color: #414042;	
+    	color: #414042;
 	}
-	
+
 	#timePeriod {
 		position:absolute;
 		top:0px;
@@ -760,17 +763,20 @@
 		margin: 30px 20px 20px 20px;
     	font-size: 30px;
 		font-weight: 700;
-    	color: #414042;	
+    	color: #414042;
 	}
-	
+
 	.select2-results__option, .select2-selection__rendered {
-		font-weight:600;	
+		font-weight:600;
 	}
-	
+
 </style>
 
 </head>
 <body>
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBCBVQS" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
 <div class="row" id="topNav" style="height:45px">
 	<div id='nav' class="col-sm-12">
 	</div>
@@ -792,16 +798,16 @@
                 <img src="images/fast-forward.svg" height="20" width="20">
             </button>
         </div>
-    </div> 	
+    </div>
     <div id='map' class="col-sm-8 col-sm-pull-4 col-xs-12">
 	    <div id='timePeriod'></div>
     </div>
-  
+
 </div>
 <div class="row">
 	<div class="col-sm-12 col-xs-12">
     	<div id="source"></div>
-    </div>   
+    </div>
 </div>
 
 <!--<script src="http://d3js.org/d3.v3.min.js"></script>
@@ -824,13 +830,6 @@
 <script src='js/turf.min.js'></script>
 <script src="js/script.js"></script>
 
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})
-(window,document,'script','dataLayer','GTM-MBCBVQS');
-</script>
-
-<noscript>
-<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBCBVQS" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
 
 <noscript>
 	<p>Your browser does not support JavaScript. If you're able to please enable Javascript to view the map.</p>

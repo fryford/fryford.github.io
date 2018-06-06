@@ -367,6 +367,10 @@ if(Modernizr.webgl) {
 			}
 			updateLayers();
 
+			dataLayer.push({
+          'event': 'navSelect',
+          'selected': i
+      })
 		}
 
 		function onselect() {
@@ -386,13 +390,13 @@ if(Modernizr.webgl) {
 
 
 				if(firsthover) {
-					dataLayer.push({
-						'event': 'hoverSelect',
-						'selected': newAREACD
-					})
+            dataLayer.push({
+                'event': 'mapHoverSelect',
+                'selected': newAREACD
+            })
 
-					firsthover = false;
-				}
+            firsthover = false;
+        }
 
 
 				if(newAREACD != oldAREACD) {
@@ -426,6 +430,10 @@ if(Modernizr.webgl) {
 					setAxisVal(e.features[0].properties.AREACD);
 				}
 
+				dataLayer.push({
+            'event':'mapClickSelect',
+            'selected': newAREACD
+        })
 		};
 
 		function disableMouseEvents() {
@@ -447,6 +455,13 @@ if(Modernizr.webgl) {
 			$("#areaselect").val(code).trigger('change.select2');
 
 		}
+
+		$('#areaselect').on('select2:unselect', function () {
+            dataLayer.push({
+                'event': 'deselectCross',
+                'selected': 'deselect'
+            })
+    });
 
 		function zoomToArea(code) {
 
@@ -647,6 +662,10 @@ if(Modernizr.webgl) {
 	}
 
 	function geolocate() {
+		dataLayer.push({
+								'event': 'geoLocate',
+								'selected': 'geolocate'
+		})
 
 		var options = {
 		  enableHighAccuracy: true,
@@ -726,9 +745,9 @@ if(Modernizr.webgl) {
 							zoomToArea(areacode);
 
 							dataLayer.push({
-								'event': 'dropSelect',
-								'selected': areacode
-							})
+                  'event': 'mapDropSelect',
+                  'selected': areacode
+              })
 
 
 					}
