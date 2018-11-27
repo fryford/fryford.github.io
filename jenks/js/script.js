@@ -127,12 +127,16 @@ function drawGraphic(graphic_data) {
 
   bodywidth = parseInt(d3.select("#vis").style("width"))
 
+
   if(bodywidth > dvc.ons.thresholds_sm_md[1]) {
     size = 2;
+		ticks = 4;
   } else if (bodywidth > dvc.ons.thresholds_sm_md[0]) {
     size = 1;
+		ticks = 4;
   } else {
     size = 0;
+		ticks = 2; 
   }
 
 	row = graphic_data[0];
@@ -263,7 +267,7 @@ for (key in row) {
         .attr("class", "axis")
         .attr("transform", "translate(0" + "," + height + ")")
         .call(d3.axisBottom(x)
-					.ticks(4)
+					.ticks(ticks)
           //.tickFormat(tickformat)
         );
 
