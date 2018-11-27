@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width"/>
 
     <!-- For development, pass document through inliner -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
 
     <style type="text/css">
-	
+
 		  *{
 			margin:0;
 			padding:0;
@@ -22,10 +22,10 @@
 			width:100%;
 			font-family: OpenSans, Arial, sans-serif
 		  }
-		  
+
 		  #title {
 			font-size:30px;
-			font-weight:200;  
+			font-weight:200;
 		  }
 
 
@@ -38,7 +38,7 @@
 
 img {
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   display: block; }
 
 body,
@@ -99,12 +99,12 @@ p, ul, ol {
   display: block !important;
   clear: both !important;
   margin: 0 auto !important;
-  max-width: 580px !important; }
+  max-width: 800px !important; }
   .container table {
     width: 100% !important;
     border-collapse: collapse; }
   .container .masthead {
-    padding: 80px 0;
+    padding: 40px 0;
     background: #71bc37;
     color: white; }
     .container .masthead h1 {
@@ -126,6 +126,126 @@ p, ul, ol {
         text-decoration: none;
         font-weight: bold; }
 
+        .tick {
+          font-family:"Open Sans",Arial, sans-serif;
+        }
+
+        .axis path, .axis line {
+          stroke: darkgrey;
+        }
+
+        .hist.label {
+          font-size: 12px;
+          font-weight: 600;
+          font-family: "Open Sans";
+        }
+
+        .tick {
+          font-size: 12px;
+          font-family: "Open Sans";
+        }
+
+        .noshow .y text{
+          font-size: 12px;
+          fill: none;
+        }
+
+        .labelshow .y text {
+          font-size: 12px;
+          fill: #666;
+        }
+
+        .noshow .xlabel {
+          font-size: 12px;
+          fill: none;
+        }
+
+        .labelshow .xlabel {
+          font-size: 12px;
+          fill: #666;
+        }
+
+        .region.label {
+          font-weight: 700;
+          font-family: "Open Sans";
+          fill:#414042;
+        }
+
+        .y.axis path {
+          stroke-width: 0px !important;
+        }
+
+        #vis {
+          margin: 0 auto !important;
+          max-width: 800px !important;
+          background-color:#fff;
+          width:100%;
+        }
+
+        #varlabel {
+          margin-left:8px;
+          font-size:18px;
+          font-weight:700;
+        }
+
+        .breaklabel {
+          font-family: "Open Sans";
+          font-size:14px;
+          font-weight:600;
+
+        }
+
+        #source {
+          margin: 0 auto !important;
+          max-width: 800px !important;
+          background-color:#fff;
+          width:100%;
+          border-top: 2px #efefef solid;
+        }
+
+        #source p {
+          font-family: "Open Sans";
+          padding: 10px 35px;
+        }
+
+        #results {
+          margin-top:30px;
+          margin-bottom:30px;
+        }
+
+        .btn {
+            font-family: "Open Sans", Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            display: inline-block;
+            width: auto;
+            cursor: pointer;
+            padding: 6px 16px 10px 16px;
+            border: 0 none;
+            text-align: center;
+            -webkit-appearance: none;
+            transition: background-color 0.25s ease-out;
+            text-decoration: none;
+            line-height: 24px;
+            background-color: #206095;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        input {
+          background-color: #fff;
+          border: 2px #206095 solid;
+          color: #206095;
+          padding: 5px 5px;
+          text-decoration: none;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+
+        .labelplay {
+          margin-left:10px;
+          margin-right:5px;
+        }
+
 
     </style>
 </head>
@@ -145,10 +265,18 @@ p, ul, ol {
                 </tr>
                 <tr>
                     <td class="content">
-						A common task we undertake is choosing the best way to bin our data ie group it in a sensible way. A commonly used starting point is the <a href="https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization">Jenks/Natural breaks</a> algorithm which seeks to reduce the variance within classes and maximize the variance between classes. It's a technique used relatively frequently when mapping data.
+						            A common task often faced is choosing the best way to group data.
+                        This is especially important for visualisation, where you may want to represent a continuous variable in discrete color groups.
                         <br><br>
-                        This page allows you to load a csv file, that has each value listed in seperate rows, in a single column. The column needs a header (no gaps). You can have multiple columns and it'll return a set of bins for each column. You can tweak the number of breaks you'd like for your application.
-
+                        This tool presents three ways of doing this, together with how this relates to the distribution of data:
+                        <li>CKmeans - An algorithm that clusters the data to maximise differences between the data. Very similar to <a href="https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization">Jenks/Natural breaks algorithm</a></li>
+                        <li>Equal interval - Divides the whole range of data values into groups of an equal range (e.g. 0-2, 3-5, 6-9, 10-12).</li>
+                        <li>k-quantile - Divides the data into equally sized groups ie the same number of areas are in each group.</li>
+                        <br>
+                        This page allows you to load a csv file, that has each value listed in seperate rows, in a single column. The column needs a header (no gaps in the name). You can have multiple columns and it'll return a set of bins for each column. The file would look a bit like this.
+                        <img width="200px" src="screenshot.png"></img>
+                        <br>
+                        You can tweak the number of breaks you'd like for your application.
                     </td>
                 </tr>
                 <tr>
@@ -156,18 +284,13 @@ p, ul, ol {
 
                         <div id="jenks"><b>First select some data...</b></div>
                         <div id="selectfile"></div><br>
+                        <!-- <div id="orplay"></div><br> -->
                         <div id="numberofbreaks"></div><br>
-                        <div id="jenks"><b>Ta da...</b></div>
+                        <div id="gobutton">
+                          <button class="btn">Generate breaks</button>
+                        </div>
+                        <div id="results"></div>
                         <div id="jenksvalues"></div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td class="content">
-                        Credit to <a href="https://twitter.com/tmcw">Tom Macwright</a> and contributors for the <a href="https://simplestatistics.org/">Simple Statistics package </a>which brought this method and many other useful statistical techniques to javascript. 
-                    <br /><br />
-                    <a href="https://twitter.com/fryford">I</a> might extend this in future to look at other classifications, quintiles, equal areas etc. <a href="https://twitter.com/fryford">Feedback welcome</a>.
-                   
 
                     </td>
                 </tr>
@@ -177,8 +300,17 @@ p, ul, ol {
     </tr>
 </table>
 
-    <script src="js/d3.v3.min.js" charset="utf-8"></script>
-    <script src="js/ss.js"></script>
+<div id="vis"></div>
+<div id="source">
+<p>
+    Credit to <a href="https://twitter.com/tmcw">Tom Macwright</a> and contributors for the <a href="https://simplestatistics.org/">Simple Statistics package </a>which brought several of these methods and many other useful statistical techniques to javascript.
+</p>
+<p><a href="https://twitter.com/fryford">Feedback welcome</a>.</p>
+</div>
+
+
+  <script src="https://cdn.ons.gov.uk/vendor/d3/4.2.7/d3.min.js" type="text/javascript"></script>
+  <script src="js/ss2.js"></script>
 	<script src="js/script.js"></script>
 
 

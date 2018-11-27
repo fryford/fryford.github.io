@@ -1,0 +1,14 @@
+{"ons":{
+"graphictitle": "small multiples histo",
+"graphic_data_url":"data.csv",
+"bin_width":5,
+"margin_top_right_bottom_left" : [70,25,40,33],
+"thresholds_sm_md":[420,800],
+"yAxisScale":"auto",
+"xAxisScale":[0,500],
+"aspectRatio_sm_md_lg" : [[1,1],[16,16],[16,16]],
+"varunit": "change in months",
+"xaxislabel":"",
+"yaxislabel":"% values",
+"source":"Office for National Statistics"
+}}
